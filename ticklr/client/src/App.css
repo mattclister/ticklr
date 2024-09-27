@@ -1,0 +1,19 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#logo-md {
+  max-height: 80px;
+  margin-bottom: 10px;
+}
+
+.form-control {
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
