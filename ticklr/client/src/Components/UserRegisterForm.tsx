@@ -2,6 +2,7 @@ import { TimeZones, timeZoneCodesArray } from "./TimeZones";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import bcrypt from "bcryptjs"; 
 
 const passwordValidation = z
   .string()
@@ -23,7 +24,7 @@ export const UserRegisterForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange", reValidateMode: "onChange"  });
 
   return (
@@ -31,7 +32,7 @@ export const UserRegisterForm = () => {
       <h2>Register</h2>
       <form
         id="registrationForm"
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit(onSubmit)}
       >
         {/* Enter Email */}
 
@@ -87,7 +88,7 @@ export const UserRegisterForm = () => {
         <select
           {...register("timeZone")}
           id="timeZone"
-          className="form-select form-select-md mb-3"
+          className="form-select f rm-select-md mb-3"
           defaultValue="UTC"
         >
           {TimeZones.map((item, index) => (
@@ -102,10 +103,24 @@ export const UserRegisterForm = () => {
 
 {/* Submit Button */}
 
-        <button type="submit" className="btn btn-primary w-100">
+        <button disabled={!isValid} type="submit" className="btn btn-primary w-100">
           Sign Up
         </button>
       </form>
     </>
   );
+};
+
+// On Submit 
+
+const onSubmit = async (data: FormData) => {
+  const hashedPassword = await bcrypt.hash(data.createPassword, 10); // 10 is the salt rounds
+
+  const formDataPacket = {
+    ...data,
+    createPassword: hashedPassword,
+    confirmPassword: undefined, // You can omit the confirm password as it's not needed anymore
+  };
+
+  console.log(formDataPacket);
 };
