@@ -17,3 +17,7 @@
 h2 {
   margin-bottom: 20px;
 }
+
+#loginPage {
+  max-width: 250px;
+}
