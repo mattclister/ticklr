@@ -20,7 +20,7 @@ export const RemindersList = () => {
       <li className="list-group-item" key={item.id}>
       <div className="row align-items-start">
       <div className="col">
-        {item.formatedDate.day} {item.formatedDate.monthTxt}
+        <h6>{item.formatedDate.day} {item.formatedDate.monthTxt}</h6>
       </div>
       <div className="col">
         {item.title}
@@ -30,6 +30,7 @@ export const RemindersList = () => {
       </div>
       </li>
       )}
+      <li className="list-group-item"> <button id="add-new-item-btn" className="btn btn-outline-secondary">+ add new item</button></li>
     </ul>
     </>
   )

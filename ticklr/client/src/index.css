@@ -1,8 +1,7 @@
 #root {
-  background-color: aqua;
   padding: 0;
-  padding-top: 10px;
   display: flex;
+  justify-content:center;
   width:100%
 }
 
@@ -11,7 +10,6 @@ body {
   display: flex;
   place-items: top;
   min-height: 100vh;
-  background-color: grey;
   overflow-x: hidden;
 }
 
@@ -19,30 +17,57 @@ button {
   margin-top: 1em;
 }
 
-li:nth-child(odd) { background: rgb(243, 242, 242); }
+li:nth-child(odd) { background: #fffaec; }
 
 #reminders-page-container {
-  background-color: rgb(25, 179, 128);
-  width:100vh
+  width:100%;
+  position: relative
 }
 
 #reminders-list-header {
   position: sticky;
+  background-color: white;
+  border-bottom: solid rgb(130, 130, 130) 1px;
   top: 0;
   z-index: 1000;
-  background-color: #007bff;
   padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  height:5vh
 }
 
 #reminders-page-container ul {
   display: flex;
 }
 
-#reminders-list-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #343a40;
-  height: 5%;
-  z-index: 1000;}
+  .menu-item {
+    height: 100%;
+  }
+
+#add-new-item-btn {
+  margin: 0px;
+  color: black;
+}
+
+#add-new-item-btn:hover {
+  background-color: #fffaec;
+  color: black;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#side-panel {
+  position: absolute;
+  background-color: #fffaec;
+  border-left: solid #dee2e6 1px;
+  right: 0px;
+  top: 30px;
+  width: 30%;
+  height: 100%;
+}
