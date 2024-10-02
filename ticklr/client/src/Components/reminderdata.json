@@ -1,0 +1,283 @@
+[
+    {
+      "id": 1,
+      "title": "Doctor's Appointment",
+      "date": "2024-10-15T09:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 2,
+      "title": "Team Meeting",
+      "date": "2024-10-17T14:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 3,
+      "title": "Grocery Shopping",
+      "date": "2024-10-18T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 4,
+      "title": "Yoga Class",
+      "date": "2024-10-20T18:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 5,
+      "title": "Project Deadline",
+      "date": "2024-10-25T17:00:00Z",
+      "userId": 101,
+      "recurs": "none"
+    },
+    {
+      "id": 6,
+      "title": "Birthday Celebration",
+      "date": "2024-11-30T19:00:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 7,
+      "title": "Weekly Review",
+      "date": "2024-12-14T15:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 8,
+      "title": "Family Dinner",
+      "date": "2024-12-22T18:30:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 9,
+      "title": "Laundry Day",
+      "date": "2024-10-21T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 10,
+      "title": "Submit Taxes",
+      "date": "2024-10-31T23:59:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 1,
+      "title": "Doctor's Appointment",
+      "date": "2024-10-15T09:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 2,
+      "title": "Team Meeting",
+      "date": "2024-10-17T14:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 3,
+      "title": "Grocery Shopping",
+      "date": "2024-10-18T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 4,
+      "title": "Yoga Class",
+      "date": "2024-10-20T18:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 5,
+      "title": "Project Deadline",
+      "date": "2024-10-25T17:00:00Z",
+      "userId": 101,
+      "recurs": "none"
+    },
+    {
+      "id": 6,
+      "title": "Birthday Celebration",
+      "date": "2024-11-30T19:00:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 7,
+      "title": "Weekly Review",
+      "date": "2024-12-14T15:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 8,
+      "title": "Family Dinner",
+      "date": "2024-12-22T18:30:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 9,
+      "title": "Laundry Day",
+      "date": "2024-10-21T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 10,
+      "title": "Submit Taxes",
+      "date": "2024-10-31T23:59:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 1,
+      "title": "Doctor's Appointment",
+      "date": "2024-10-15T09:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 2,
+      "title": "Team Meeting",
+      "date": "2024-10-17T14:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 3,
+      "title": "Grocery Shopping",
+      "date": "2024-10-18T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 4,
+      "title": "Yoga Class",
+      "date": "2024-10-20T18:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 5,
+      "title": "Project Deadline",
+      "date": "2024-10-25T17:00:00Z",
+      "userId": 101,
+      "recurs": "none"
+    },
+    {
+      "id": 6,
+      "title": "Birthday Celebration",
+      "date": "2024-11-30T19:00:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 7,
+      "title": "Weekly Review",
+      "date": "2024-12-14T15:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 8,
+      "title": "Family Dinner",
+      "date": "2024-12-22T18:30:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 9,
+      "title": "Laundry Day",
+      "date": "2024-10-21T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 10,
+      "title": "Submit Taxes",
+      "date": "2024-10-31T23:59:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 1,
+      "title": "Doctor's Appointment",
+      "date": "2024-10-15T09:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 2,
+      "title": "Team Meeting",
+      "date": "2024-10-17T14:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 3,
+      "title": "Grocery Shopping",
+      "date": "2024-10-18T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 4,
+      "title": "Yoga Class",
+      "date": "2024-10-20T18:00:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 5,
+      "title": "Project Deadline",
+      "date": "2024-10-25T17:00:00Z",
+      "userId": 101,
+      "recurs": "none"
+    },
+    {
+      "id": 6,
+      "title": "Birthday Celebration",
+      "date": "2024-11-30T19:00:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    },
+    {
+      "id": 7,
+      "title": "Weekly Review",
+      "date": "2024-12-14T15:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 8,
+      "title": "Family Dinner",
+      "date": "2024-12-22T18:30:00Z",
+      "userId": 101,
+      "recurs": "monthly"
+    },
+    {
+      "id": 9,
+      "title": "Laundry Day",
+      "date": "2024-10-21T10:00:00Z",
+      "userId": 101,
+      "recurs": "weekly"
+    },
+    {
+      "id": 10,
+      "title": "Submit Taxes",
+      "date": "2024-10-31T23:59:00Z",
+      "userId": 101,
+      "recurs": "yearly"
+    }
+  ]
+  

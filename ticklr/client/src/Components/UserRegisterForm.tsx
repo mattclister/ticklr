@@ -2,7 +2,7 @@ import { TimeZones, timeZoneCodesArray } from "./TimeZones";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import bcrypt from "bcryptjs"; 
+import bcrypt from "bcryptjs"
 
 const passwordValidation = z
   .string()
@@ -114,12 +114,12 @@ export const UserRegisterForm = () => {
 // On Submit 
 
 const onSubmit = async (data: FormData) => {
-  const hashedPassword = await bcrypt.hash(data.createPassword, 10); // 10 is the salt rounds
+  const hashedPassword = await bcrypt.hash(data.createPassword, 10);
 
   const formDataPacket = {
     ...data,
     createPassword: hashedPassword,
-    confirmPassword: undefined, // You can omit the confirm password as it's not needed anymore
+    confirmPassword: undefined,
   };
 
   console.log(formDataPacket);

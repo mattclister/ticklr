@@ -3,14 +3,20 @@ import logo from "../assets/ticklrLogo.png"
 import { UserLoginForm } from "./UserLoginForm"
 import { UserRegisterForm } from "./UserRegisterForm"
 
-export const LoginPage = () => {
+interface Props {
+  setLoggedIn: (boolean: boolean) => void
+}
+
+export const LoginPage = ({setLoggedIn}: Props) => {
+
   // State User to toggle sign up option.
-  const [signUp,setSignUp] = useState(false)
+
+  const [showSignUp,setshowSignUp] = useState(false)
   return (
     <div id="loginPage">
     <img src={logo} id="logo-md" alt="Logo"/>
-    {signUp?<UserRegisterForm/>:<UserLoginForm/>}
-    <button  type="button" className="btn btn-outline-primary w-100" onClick={()=>setSignUp(!signUp)}>{signUp?"Log In":"Sign Up"}</button>
+    {showSignUp?<UserRegisterForm/>:<UserLoginForm setLoggedIn={setLoggedIn}/>}
+    <button  id="sign-login-toggle" type="button" className="btn btn-outline-primary w-100" onClick={()=>setshowSignUp(!showSignUp)}>{showSignUp?"Login":"Sign Up"}</button>
     </div>
   )
 }
