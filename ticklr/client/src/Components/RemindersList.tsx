@@ -1,6 +1,7 @@
 import reminderdata from './reminderdata.json' 
 console.log(reminderdata)
 
+// Function to format date from a UTC string
 const formatedDate = (utcDateTime: string)=> {
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
   const [datePart] = utcDateTime.split('T');
@@ -12,10 +13,12 @@ const formatedDate = (utcDateTime: string)=> {
 const formatedArray = reminderdata.map((item)=> ({...item, formatedDate: formatedDate(item.date)}))
 console.log(formatedArray)
 
+// This needs to take data as a propery into the component
+
 export const RemindersList = () => {
   return (
     <>
-    <ul id="remindersList" className="list-group">
+    <ul id="reminders-list" className="list-group">
       {formatedArray.map((item)=>
       <li className="list-group-item" key={item.id}>
       <div className="row align-items-start">

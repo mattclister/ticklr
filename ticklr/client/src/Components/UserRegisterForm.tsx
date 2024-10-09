@@ -103,7 +103,7 @@ export const UserRegisterForm = () => {
 
 {/* Submit Button */}
 
-        <button disabled={!isValid} type="submit" className="btn btn-primary w-100">
+        <button disabled={!isValid} type="submit" className="btn btn-primary w-100 login-btn">
           Sign Up
         </button>
       </form>

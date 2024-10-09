@@ -1,31 +1,28 @@
 import { useState } from "react"
 import { RemindersList } from "./RemindersList"
+import Settings from "./Settings"
 import logo from "../assets/ticklrLogo.png"
-import sidebar from "../assets/list.svg"
-
+import topbar from "../assets/list.svg"
+import { ItemDetails } from "./ItemDetails"
 export const RemindersPage = () => {
   
-  const [settingsVisable, setSettingsVisble] = useState(false)
-  const [sideBarVisable, setSideBarVisable] = useState(false)
+  const [topBarVisable, settopBarVisable] = useState(false)
+  const [bottomBarVisable, setBottomBarVisable] = useState(false)
 
     return (
     <div id="reminders-page-container">
     <div id="reminders-list-header">
-    <button id="add-new-item-btn" className="btn btn-outline-secondary menu-button"> + </button>
+    <button id="add-new-item-menu-btn" className="btn btn-outline-secondary menu-button" onClick={()=>{setBottomBarVisable(!bottomBarVisable); settopBarVisable(false)}}> + </button>
       <img src={logo} id="logo-small-left" alt="Logo" className="menu-item"/>
-    <button id="add-new-item-btn" className="btn btn-outline-secondary" onClick={()=>setSideBarVisable(!sideBarVisable)}><img src={sidebar} id="settings-small-left" alt="settings" className="menu-button"/></button>
+    <button id="add-new-item-btn" className="btn btn-outline-secondary menu-button" onClick={()=>{settopBarVisable(!topBarVisable); setBottomBarVisable(false)}}><img src={topbar} id="settings-small-left" alt="settings" className="menu-button"/></button>
+    </div>
+    <div id="settings-panel" className={`${topBarVisable? "visible" : "hidden" }`}>
+    <Settings/>
     </div>
     <RemindersList/>
-
-    <div id="side-panel" className={`${sideBarVisable? "visible" : "hidden" }`}>
-      <p>Option 2</p>
-      <p>Option 3</p>
-      <p>Option 4</p>
-      <p>Option 5</p>
-    <input type="checkbox" checked data-toggle="toggle"/>
+    <div id="details-panel" className={`${bottomBarVisable? "visible" : "hidden" }`}>
+    <ItemDetails/>
     </div>
-    
     </div>
-
   )
 }
