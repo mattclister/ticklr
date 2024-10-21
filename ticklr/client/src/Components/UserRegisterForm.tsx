@@ -2,7 +2,7 @@ import { TimeZones, timeZoneCodesArray } from "./TimeZones";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import bcrypt from "bcryptjs"
+import { CreateUser } from "../Utilities/ServerRequests";
 
 const passwordValidation = z
   .string()
@@ -18,7 +18,7 @@ const schema = z.object({
 }).refine((data) => data.createPassword === data.confirmPassword, {message: "Passwords do not match", path: ["confirmPassword"]});
 
 // Using the above schema to create a type for the FormData
-type FormData = z.infer<typeof schema>;
+export type FormData = z.infer<typeof schema>;
 
 export const UserRegisterForm = () => {
   const {
@@ -32,7 +32,7 @@ export const UserRegisterForm = () => {
       <h2>Register</h2>
       <form
         id="registrationForm"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(CreateUser)}
       >
         {/* Enter Email */}
 
@@ -109,18 +109,4 @@ export const UserRegisterForm = () => {
       </form>
     </>
   );
-};
-
-// On Submit 
-
-const onSubmit = async (data: FormData) => {
-  const hashedPassword = await bcrypt.hash(data.createPassword, 10);
-
-  const formDataPacket = {
-    ...data,
-    createPassword: hashedPassword,
-    confirmPassword: undefined,
-  };
-
-  console.log(formDataPacket);
 };

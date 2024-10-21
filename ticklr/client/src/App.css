@@ -1,17 +1,17 @@
 body {
   margin: 0;
   overflow-x: hidden;
-  max-width: 1280px;
-  text-align: center;
-  justify-content: center;
   width:100%;
-  display: flex;
+  height: 100vh;
 }
 
 #root {
   justify-content: center;
   display: flex;
+  align-items: center;
   width:100%;
+  margin: 0;
+  height: 100vh;
 }
 
   /* Images */
@@ -36,9 +36,12 @@ h2 {
 /* Login Page */
 
 #loginPage {
-  margin: auto;
-  max-width: 13rem;
-  align-content: center;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  align-items: center;
+  max-width: 250px;
+  min-width: 175px;
+  text-align: center;
 }
 
 .login-btn {
@@ -84,6 +87,7 @@ li:nth-child(odd) { background: #fffaec; }
   position: sticky;
   justify-content: space-between;
   height:3.5rem;
+  opacity: 0.9;
 }
 
 #reminders-list {
@@ -92,14 +96,17 @@ li:nth-child(odd) { background: #fffaec; }
 }
 
 /* Menu Bar */
-#menu-button {
+.menu-button {
 text-align: center;
 vertical-align: middle;
-font-size: 1rem}
+font-size: 1rem;
+border: 0px solid transparent;
+}
 
 #add-new-item-btn {
   margin: 0px;
   color: black;
+  opacity: 0.7;
 }
 
 #add-new-item-btn:hover {
@@ -136,4 +143,7 @@ font-size: 1rem}
 #reminders-page-container{
 justify-content: center;
 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+width: 100%;
+text-align: center;
+max-width: 1000px;
 }

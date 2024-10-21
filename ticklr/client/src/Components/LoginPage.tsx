@@ -21,5 +21,3 @@ export const LoginPage = ({setLoggedIn}: Props) => {
     </div>
   )
 }
-
-// This currently works well.
