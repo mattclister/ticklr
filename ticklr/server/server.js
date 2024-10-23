@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const bcrypt = require('bcrypt');
-const {createUser, loginUser} = require('./queries')
+const {createUser, loginUser, validateToken} = require('./queries')
 
 // Tell express to parse json when request header says body is json
 app.use(express.json());
@@ -18,6 +18,10 @@ app.post('/users', createUser)
 
 // Login User
 app.post('/login', loginUser);
+
+// Authenticate User
+app.post('/authenticate', validateToken);
+
 
 // Handles other requests and send them to React's index.html
 app.get('*', (req, res) => {
