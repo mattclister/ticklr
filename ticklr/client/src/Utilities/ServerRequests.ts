@@ -29,16 +29,16 @@ export const CreateUser = async (data: FormData) => {
 // Login User
 
 export const LoginUser = async (data: LoginData) => {
-
-  apiClient
-    .post("/login", data)
-    .then((response) => {
-      console.log("User Logged In", response);
-      localStorage.setItem("webToken",response.data.token)
-    })
-    .catch((error) => {
-      console.log("Failed to Login", error);
-    });
+  try {
+    const response = await apiClient.post("/login", data);
+    console.log("User Logged In", response);
+    localStorage.setItem("webToken", response.data.token);
+    
+    return true
+  } catch (error) {
+    console.log("Failed to Login", error);
+    return false
+  }
 };
 
 // Authenticate User
@@ -58,4 +58,17 @@ export const AuthenticateUser = (token: string | null) => {
       console.error("Failed to authenticate", error.response ? error.response.data : error.message);
       return error;
     });
+};
+
+// Get Reminders
+
+export const getReminders = async (userID: string | undefined) => {
+  try {
+    const response = apiClient.get(`/reminders/${userID}`);
+    const data = await response;
+    return data
+  } catch (error) {
+    console.error("Error fetching reminders:", error);
+    throw error  
+}
 };

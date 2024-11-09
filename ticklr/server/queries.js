@@ -88,7 +88,6 @@ async function loginUser(req, res) {
 }
 
 // Validate a token
-
 async function validateToken (req, res) {
   const token = req.body.token;
   console.log(token)
@@ -101,13 +100,97 @@ async function validateToken (req, res) {
     if (err) {
       return res.status(401).json({ message: 'Invalid token' });
     }
-    // Token is valid; you can access decoded information here
+    // Token is valid. Return decoded header data
     res.status(200).json({ message: 'Token is valid', data: decoded });
   });
 };
 
+// Get Reminders
+
+async function getReminders(req, res) {
+  const { userID } = req.params;
+  const token = req.body.token;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  // Verify the token
+  jwt.verify(token, web_token_key, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    const tokenUserId = decoded.userId; 
+
+    // Check if userID matches token
+    if (tokenUserId !== userID) {
+      return res.status(403).json({ message: 'User ID does not match token' });
+    }
+
+    try {
+      // Fetch reminders from the database based on userID
+      const reminders = await getRemindersFromDatabase(userID);
+      res.status(200).json({ message: 'Reminders retrieved successfully', reminders });
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ message: 'Error retrieving reminders' });
+    }
+  });
+
+async function getRemindersFromDatabase(userId) {
+  const query = `SELECT pk_reminder_id, date, fk_user_id, recurs, reminder_date, title FROM reminders WHERE fk_user_id = ?`;
+  db.all(query, [user_id], (err, rows) => {
+    if (err) {
+      console.error("Error querying reminders:", err.message);
+      reject("Error querying reminders");
+    } else {
+      resolve(rows);
+    }
+  });
+}
+}
+
+// Create Reminder
+
+function addReminderToDatabase(user_id, date, title) {
+  return new Promise((resolve, reject) => {
+    const query = `INSERT INTO reminders (date, fk_user_id, title) VALUES (?, ?, ?)`;
+
+    db.run(query, [date, user_id, title], function(err) {
+      if (err) {
+        console.error("Error inserting reminder:", err.message);
+        reject("Error inserting reminder");
+      } else {
+        resolve({ message: "Reminder added successfully", reminderId: this.lastID });
+      }
+    });
+  });
+}
+
+function createReminder (req, res) {
+  const token = req.body.token;
+  const task = req.body.task;
+
+  try {
+  jwt.verify(token, web_token_key, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    } else {
+      addReminderToDatabase({userID,task, title} = task)
+    }
+  }
+  )
+} catch {
+  return res.status(401).json({ message: 'Failed to add reminder' });
+}
+}
+
+
+
 module.exports = {
   createUser,
   loginUser,
-  validateToken
+  validateToken,
+  getReminders
 };

@@ -4,7 +4,13 @@ import Settings from "./Settings"
 import logo from "../assets/ticklrLogo.png"
 import topbar from "../assets/list.svg"
 import { ItemDetails } from "./ItemDetails"
-export const RemindersPage = () => {
+
+interface RemindersPageProps {
+  handleLogOut: () => void,
+  userID: string | undefined
+}
+
+export const RemindersPage = ({handleLogOut, userID}: RemindersPageProps) => {
   
   const [topBarVisable, settopBarVisable] = useState(false)
   const [bottomBarVisable, setBottomBarVisable] = useState(false)
@@ -17,9 +23,9 @@ export const RemindersPage = () => {
     <button id="add-new-item-btn" className="btn btn-outline-secondary menu-button" onClick={()=>{settopBarVisable(!topBarVisable); setBottomBarVisable(false)}}><img src={topbar} id="settings-small-left" alt="settings" className="menu-button"/></button>
     </div>
     <div id="settings-panel" className={`${topBarVisable? "visible" : "hidden" }`}>
-    <Settings/>
+    <Settings handleLogOut={handleLogOut}/>
     </div>
-    <RemindersList/>
+    <RemindersList userID={userID} setBottomBarVisable={setBottomBarVisable}/>
     <div id="details-panel" className={`${bottomBarVisable? "visible" : "hidden" }`}>
     <ItemDetails/>
     </div>

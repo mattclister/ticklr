@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const bcrypt = require('bcrypt');
-const {createUser, loginUser, validateToken} = require('./queries')
+const {createUser, loginUser, validateToken, getReminders} = require('./queries')
 
 // Tell express to parse json when request header says body is json
 app.use(express.json());
@@ -21,6 +21,9 @@ app.post('/login', loginUser);
 
 // Authenticate User
 app.post('/authenticate', validateToken);
+
+// Get reminders
+app.get("/reminders:userID", getReminders)
 
 
 // Handles other requests and send them to React's index.html

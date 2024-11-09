@@ -75,7 +75,13 @@ h2 {
 /* Reminders List */
 li:nth-child(odd) { background: #fffaec; }
 
-
+#reminders-page-container{
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  text-align: center;
+  max-width: 1000px;
+  }  
 
 #reminders-list-header {
   background-color: white;
@@ -93,6 +99,8 @@ li:nth-child(odd) { background: #fffaec; }
 #reminders-list {
   z-index: 999;
   border-radius: 0px;
+  max-height: calc(100vh - 3.5rem);
+  overflow-y: auto;
 }
 
 /* Menu Bar */
@@ -140,10 +148,3 @@ border: 0px solid transparent;
   z-index: 999;
 }
 
-#reminders-page-container{
-justify-content: center;
-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-width: 100%;
-text-align: center;
-max-width: 1000px;
-}

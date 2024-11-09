@@ -1,9 +1,19 @@
-type TimeZone = {
+export type TimeZone = {
     "TimeZoneCode": string,
     "TimeZone": string,
     "UTCText": string,
     "UTCNumber": Number
 }
+
+// Time Formating Function: Splits UTC into object of strings {year: monrh: day:}
+export const formatedDate = (utcDateTime: string)=> {
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  const [datePart] = utcDateTime.split('T');
+  const [year, month, day] = datePart.split('-');
+  const monthTxt = months[parseInt(month)-1]
+  return {day, month, year, monthTxt}
+}
+
 
 // When adding a new TimeZone, you must also add a new TimeZone Code to the timeZoneCodesArray. This is to enable z.enum to function correctly.
 

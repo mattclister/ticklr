@@ -1,40 +1,73 @@
-import reminderdata from './reminderdata.json' 
-console.log(reminderdata)
-
-// Function to format date from a UTC string
-const formatedDate = (utcDateTime: string)=> {
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-  const [datePart] = utcDateTime.split('T');
-  const [year, month, day] = datePart.split('-');
-  const monthTxt = months[parseInt(month)-1]
-  return {day, month, year, monthTxt}
-}
-
-const formatedArray = reminderdata.map((item)=> ({...item, formatedDate: formatedDate(item.date)}))
-console.log(formatedArray)
+import { useState, useEffect } from "react";
+import { getReminders } from "../Utilities/ServerRequests";
+import { formatedDate, TimeZone } from "./TimeZones";
 
 // This needs to take data as a propery into the component
 
-export const RemindersList = () => {
+interface Props {
+  setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>;
+  userID: string | undefined;
+}
+
+export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
+  const [reminderdata, setReminderData] = useState();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchReminders = () => {
+      try {
+        const requestedData = getReminders(userID);
+        setReminderData(requestedData);
+        console.log(requestedData);
+        console.log(reminderdata);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching reminders:", error);
+        setLoading(false);
+      }
+    };
+  });
+
   return (
     <>
-    <ul id="reminders-list" className="list-group">
-      {formatedArray.map((item)=>
-      <li className="list-group-item" key={item.id}>
-      <div className="row align-items-start">
-      <div className="col">
-        <h6>{item.formatedDate.day} {item.formatedDate.monthTxt}</h6>
-      </div>
-      <div className="col">
-        {item.title}
-        </div>
-        <div className="col">
-      {item.recurs}</div>
-      </div>
-      </li>
+      {reminderdata === undefined ? (
+        <li className="list-group-item">
+          {" "}
+          <button
+            id="add-new-item-btn"
+            onClick={() => setBottomBarVisable(true)}
+            className="btn btn-outline-secondary"
+          >
+            + add new item
+          </button>
+        </li>
+      ) : (
+        <ul id="reminders-list" className="list-group">
+          {reminderdata.map((item) => (
+            <li className="list-group-item" key={item.id}>
+              <div className="row align-items-start">
+                <div className="col">
+                  <h6>
+                    {item.reminderdata.day} {item.reminderdata.monthTxt}
+                  </h6>
+                </div>
+                <div className="col">{item.title}</div>
+                <div className="col">{item.recurs}</div>
+              </div>
+            </li>
+          ))}
+          <li className="list-group-item">
+            {" "}
+            <button
+              id="add-new-item-btn"
+              onClick={() => setBottomBarVisable(true)}
+              className="btn btn-outline-secondary"
+            >
+              + add new item
+            </button>
+          </li>
+        </ul>
       )}
-      <li className="list-group-item"> <button id="add-new-item-btn" className="btn btn-outline-secondary">+ add new item</button></li>
-    </ul>
     </>
-  )
-}
+  );
+};
