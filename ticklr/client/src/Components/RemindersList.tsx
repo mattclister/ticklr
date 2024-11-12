@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { getReminders } from "../Utilities/ServerRequests";
-import { formatedDate, TimeZone } from "./TimeZones";
-
-// This needs to take data as a propery into the component
+import { ReminderType } from "../Utilities/types";
 
 interface Props {
   setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,22 +8,23 @@ interface Props {
 }
 
 export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
-  const [reminderdata, setReminderData] = useState();
+  const [reminderdata, setReminderData] = useState<ReminderType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchReminders = () => {
+    const fetchReminders = async () => {
       try {
-        const requestedData = getReminders(userID);
-        setReminderData(requestedData);
+        console.log("Fetching Reminders")
+        const requestedData = await getReminders(userID);
         console.log(requestedData);
-        console.log(reminderdata);
+        setReminderData(requestedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching reminders:", error);
         setLoading(false);
       }
     };
+    fetchReminders()
   });
 
   return (
@@ -44,7 +43,7 @@ export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
       ) : (
         <ul id="reminders-list" className="list-group">
           {reminderdata.map((item) => (
-            <li className="list-group-item" key={item.id}>
+            <li className="list-group-item" key={item.id.toString()}>
               <div className="row align-items-start">
                 <div className="col">
                   <h6>

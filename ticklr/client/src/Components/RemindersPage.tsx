@@ -10,7 +10,7 @@ interface RemindersPageProps {
   userID: string | undefined
 }
 
-export const RemindersPage = ({handleLogOut, userID}: RemindersPageProps) => {
+export const RemindersPage = ({handleLogOut, userID, token}: RemindersPageProps) => {
   
   const [topBarVisable, settopBarVisable] = useState(false)
   const [bottomBarVisable, setBottomBarVisable] = useState(false)
