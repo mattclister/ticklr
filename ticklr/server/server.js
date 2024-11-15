@@ -23,13 +23,7 @@ app.post('/login', loginUser);
 app.post('/authenticate', validateToken);
 
 // Get reminders
-app.get("/reminders:userID", getReminders)
-
-
-// Handles other requests and send them to React's index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', '/index.html'));
-});
+app.get("/reminders", getReminders);
 
 // Start the server
 app.listen(port, () => {

@@ -62,17 +62,15 @@ export const AuthenticateUser = (token: string | null) => {
 
 // Get Reminders
 
-export const getReminders = async (userID: string | undefined) => {
+export const getReminders = async () => {
   let token = localStorage.getItem("webToken");
-  console.log(`Sending get request. UserID: ${userID} Token: ${token}`)
   try {
-    const response = await apiClient.get(`/reminders/${userID}`, {
+    const response = await apiClient.get(`/reminders`, {
       headers: { 
       Authorization: `Bearer ${token}`
     }
     });
-    console.log(`Response: ${response.data}`)
-    return response.data;
+    return response.data.reminders;
   } catch (error) {
     console.error("Error fetching reminders:", error);
     throw error  

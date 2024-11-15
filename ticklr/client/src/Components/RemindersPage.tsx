@@ -7,10 +7,9 @@ import { ItemDetails } from "./ItemDetails"
 
 interface RemindersPageProps {
   handleLogOut: () => void,
-  userID: string | undefined
 }
 
-export const RemindersPage = ({handleLogOut, userID, token}: RemindersPageProps) => {
+export const RemindersPage = ({handleLogOut}: RemindersPageProps) => {
   
   const [topBarVisable, settopBarVisable] = useState(false)
   const [bottomBarVisable, setBottomBarVisable] = useState(false)
@@ -22,12 +21,12 @@ export const RemindersPage = ({handleLogOut, userID, token}: RemindersPageProps)
       <img src={logo} id="logo-small-left" alt="Logo" className="menu-item"/>
     <button id="add-new-item-btn" className="btn btn-outline-secondary menu-button" onClick={()=>{settopBarVisable(!topBarVisable); setBottomBarVisable(false)}}><img src={topbar} id="settings-small-left" alt="settings" className="menu-button"/></button>
     </div>
-    <div id="settings-panel" className={`${topBarVisable? "visible" : "hidden" }`}>
-    <Settings handleLogOut={handleLogOut}/>
-    </div>
-    <RemindersList userID={userID} setBottomBarVisable={setBottomBarVisable}/>
+    <RemindersList setBottomBarVisable={setBottomBarVisable}/>
     <div id="details-panel" className={`${bottomBarVisable? "visible" : "hidden" }`}>
     <ItemDetails/>
+    </div>
+    <div id="settings-panel" className={`${topBarVisable? "visible" : "hidden" }`}>
+    <Settings handleLogOut={handleLogOut}/>
     </div>
     </div>
   )

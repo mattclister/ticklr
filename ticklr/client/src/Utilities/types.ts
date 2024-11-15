@@ -2,9 +2,10 @@ export interface StateProps {
     setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>}
 
 export type ReminderType = {
-    id: Number,
+    pk_reminder_id: Number,
     title: String,
     date: String,
-    userId: Number,
+    reminder_date: String,
+    fk_user_id: Number,
     recurs: String
 }

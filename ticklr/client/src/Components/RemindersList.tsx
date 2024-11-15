@@ -4,19 +4,18 @@ import { ReminderType } from "../Utilities/types";
 
 interface Props {
   setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>;
-  userID: string | undefined;
 }
 
-export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
+export const RemindersList = ({ setBottomBarVisable}: Props) => {
   const [reminderdata, setReminderData] = useState<ReminderType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchReminders = async () => {
       try {
-        console.log("Fetching Reminders")
-        const requestedData = await getReminders(userID);
-        console.log(requestedData);
+        console.log(`Fetching Reminders...`)
+        const requestedData = await getReminders();
+        console.log(requestedData)
         setReminderData(requestedData);
         setLoading(false);
       } catch (error) {
@@ -25,7 +24,7 @@ export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
       }
     };
     fetchReminders()
-  });
+  },[]);
 
   return (
     <>
@@ -43,11 +42,11 @@ export const RemindersList = ({ setBottomBarVisable, userID }: Props) => {
       ) : (
         <ul id="reminders-list" className="list-group">
           {reminderdata.map((item) => (
-            <li className="list-group-item" key={item.id.toString()}>
+            <li className="list-group-item" key={item.pk_reminder_id.toString()}>
               <div className="row align-items-start">
                 <div className="col">
                   <h6>
-                    {item.reminderdata.day} {item.reminderdata.monthTxt}
+                    {item.date}
                   </h6>
                 </div>
                 <div className="col">{item.title}</div>

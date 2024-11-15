@@ -8,7 +8,6 @@ import { AuthenticateUser } from "./Utilities/ServerRequests";
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [userID, setUserID] = useState<string | undefined>(undefined);
   const JWT_Token = localStorage.getItem("webToken");
 
   // Authenticate User and Auto Login
@@ -21,17 +20,14 @@ function App() {
       AuthenticateUser(JWT_Token)?.then((data) => {
         if (data.message === "Token is valid") {
           setLoggedIn(true);
-          setUserID(data.userId);
 
         } else {
           setLoggedIn(false);
-          setUserID(undefined);
         }
         setIsLoading(false);
       });
     } else {
       setLoggedIn(false);
-      setUserID(undefined);
       setIsLoading(false);
     }
   }, []);
@@ -39,7 +35,6 @@ function App() {
   // Functions
     function handleLogOut() {
       setLoggedIn(false);
-      setUserID(undefined);
       localStorage.removeItem("webToken")
     }  
 
@@ -58,7 +53,7 @@ function App() {
   } else {
     // If user authenticated, auto login else show login page
 
-    return <>{loggedIn ? <RemindersPage userID={userID} handleLogOut={handleLogOut}/> : <LoginPage handleSetLogIn={handleSetLogIn}/>}</>;
+    return <>{loggedIn ? <RemindersPage handleLogOut={handleLogOut}/> : <LoginPage handleSetLogIn={handleSetLogIn}/>}</>;
   }
 }
 
