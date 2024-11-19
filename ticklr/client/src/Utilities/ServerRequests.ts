@@ -1,6 +1,7 @@
 import { FormData } from "../Components/UserRegisterForm";
 import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
+import { NewReminderType } from "../Components/ItemDetails";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -75,4 +76,18 @@ export const getReminders = async () => {
     console.error("Error fetching reminders:", error);
     throw error  
 }
+};
+
+export const addReminder = (reminder: NewReminderType) => {
+
+  console.log(reminder)
+
+  apiClient
+    .post("/reminders", )
+    .then((response) => {
+      console.log("Reminder Added", response.data);
+    })
+    .catch((error) => {
+      console.error("Error adding reminder", error);
+    });
 };

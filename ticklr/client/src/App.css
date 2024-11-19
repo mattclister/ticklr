@@ -57,7 +57,9 @@ h2 {
   width:100%;
   max-width: 1000px;
   height: 50%;
-  background-color: aquamarine;
+  min-height: 50%;
+  max-height: 75%;
+  background-color: white;
   position: fixed; 
   bottom: 0;
   left: 0;
@@ -70,7 +72,18 @@ h2 {
   z-index: 999;
   align-content: center;
   position: absolute;
+  overflow-y: auto;
 }
+
+.form-control {
+  width: 100% !important;
+}
+
+.react-datepicker-wrapper {
+  width: 100%}
+
+.form-label {
+  display: block;}
 
 #form-item {
   margin-bottom: 1em;
@@ -150,7 +163,7 @@ border: 0px solid transparent;
   width:100%;
   max-width: 1000px;
   height: 50%;
-  background-color: aquamarine;
+  background-color: white;
   position: fixed; 
   bottom: 0;
   left: 0;
