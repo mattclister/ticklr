@@ -3,10 +3,10 @@ import { getReminders } from "../Utilities/ServerRequests";
 import { ReminderType } from "../Utilities/types";
 
 interface Props {
-  setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>;
+  setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const RemindersList = ({ setBottomBarVisable}: Props) => {
+export const RemindersList = ({ setBottomBarVisible}: Props) => {
   const [reminderdata, setReminderData] = useState<ReminderType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -33,7 +33,7 @@ export const RemindersList = ({ setBottomBarVisable}: Props) => {
           {" "}
           <button
             id="add-new-item-btn"
-            onClick={() => setBottomBarVisable(true)}
+            onClick={() => setBottomBarVisible(true)}
             className="btn btn-outline-secondary"
           >
             + add new item
@@ -58,7 +58,7 @@ export const RemindersList = ({ setBottomBarVisable}: Props) => {
             {" "}
             <button
               id="add-new-item-btn"
-              onClick={() => setBottomBarVisable(true)}
+              onClick={() => setBottomBarVisible(true)}
               className="btn btn-outline-secondary"
             >
               + add new item

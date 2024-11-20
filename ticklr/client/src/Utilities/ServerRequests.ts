@@ -2,6 +2,8 @@ import { FormData } from "../Components/UserRegisterForm";
 import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import { NewReminderType } from "../Components/ItemDetails";
+import { calcReminderDate } from "../Utilities/helperFunctions";
+
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -80,18 +82,19 @@ export const getReminders = async () => {
 
 // Add Reminder
 
-export const addReminder = async (reminder: NewReminderType) => {
+export const addReminder = async (newReminder: NewReminderType, setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>) => {
+  calcReminderDate(newReminder)
   let token = localStorage.getItem("webToken");
-  console.log(reminder)
-
+  
   apiClient.post(
     "/reminders",
-    reminder,
+    newReminder,
     {
       headers: { Authorization: `Bearer ${token}` },
     }
   ).then((response) => {
       console.log("Reminder Added", response.data);
+      setBottomBarVisable(false)
     })
     .catch((error) => {
       console.error("Error adding reminder", error);

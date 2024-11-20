@@ -24,11 +24,17 @@ const itemSchema = z.object({
 
 export type NewReminderType = z.infer<typeof itemSchema>;
 
-export const ItemDetails = () => {
+export type ItemDetailsProps = {
+  setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  ReRenderRemindersList: () => void
+};
+
+export const ItemDetails = ({setBottomBarVisible, ReRenderRemindersList}: ItemDetailsProps) => {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<NewReminderType>({
     resolver: zodResolver(itemSchema),
@@ -36,8 +42,14 @@ export const ItemDetails = () => {
     reValidateMode: "onSubmit",
   });
 
-  const onSubmit = (data: NewReminderType) => {
-    addReminder(data);
+  const onSubmit = async (data: NewReminderType) => {
+    try {
+      await addReminder(data, setBottomBarVisible);
+        ReRenderRemindersList();
+      reset();
+    } catch (error) {
+      console.error("Error adding reminder:", error);
+    }
   };
 
   return (
@@ -118,7 +130,7 @@ export const ItemDetails = () => {
             <p className="text-danger">{errors.reminder.message}</p>
           )}
         </div>
-        <button className="btn btn-warning w-100 mt-3">
+        <button type="button" className="btn btn-warning w-100 mt-3">
           Cancel
         </button>
         <button type="submit" className="btn btn-primary w-100 login-btn">
