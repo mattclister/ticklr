@@ -78,13 +78,19 @@ export const getReminders = async () => {
 }
 };
 
-export const addReminder = (reminder: NewReminderType) => {
+// Add Reminder
 
+export const addReminder = async (reminder: NewReminderType) => {
+  let token = localStorage.getItem("webToken");
   console.log(reminder)
 
-  apiClient
-    .post("/reminders", )
-    .then((response) => {
+  apiClient.post(
+    "/reminders",
+    reminder,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  ).then((response) => {
       console.log("Reminder Added", response.data);
     })
     .catch((error) => {

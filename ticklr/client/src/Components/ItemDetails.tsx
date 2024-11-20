@@ -46,7 +46,7 @@ export const ItemDetails = () => {
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
           <div className="col-5 ms-0">
             <label className="form-label" htmlFor="Date">
-              Reminder Date
+              Date
             </label>
             <Controller
               control={control}

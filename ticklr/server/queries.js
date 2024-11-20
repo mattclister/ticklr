@@ -139,7 +139,6 @@ async function getReminders(req, res) {
   });
 }
 
-
 async function getRemindersFromDatabase(userId) {
   return new Promise((resolve, reject) => {
   const query = `SELECT pk_reminder_id, date, fk_user_id, recurs, reminder_date, title FROM reminders WHERE fk_user_id = ?`;
@@ -156,44 +155,53 @@ async function getRemindersFromDatabase(userId) {
 
 // Create Reminder
 
-function addReminderToDatabase(user_id, date, title) {
-  return new Promise((resolve, reject) => {
-    const query = `INSERT INTO reminders (date, fk_user_id, title) VALUES (?, ?, ?)`;
+async function addReminder(req, res) {
+  const authHeader = req.headers.authorization;
+  console.log(req.body)
+  const {date, number, reminder} = req.body;
 
-    db.run(query, [date, user_id, title], function(err) {
-      if (err) {
-        console.error("Error inserting reminder:", err.message);
-        reject("Error inserting reminder");
-      } else {
-        resolve({ message: "Reminder added successfully", reminderId: this.lastID });
-      }
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+// Verify the token
+jwt.verify(token, web_token_key, async (err, decoded) => {
+  if (err) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+
+// Get user id from token
+  const tokenUserId = decoded.userId;
+  console.log(`Adding Reminders, the decoded userId is: ${tokenUserId}`) 
+
+// Add reminder to database
+const createReminderQuery = `INSERT INTO reminders (date, fk_user_id, recurs, title, reminder_date) VALUES (?, ?, ?, ?, ?)`;
+
+db.run(createReminderQuery, [date, tokenUserId, number, reminder, date], function (err) {
+  if (err) {
+    console.error('Error inserting user:', err.message);
+    return res.status(500).json({ error: 'Failed to create user' });
+  }
+  
+  // Successfully added the reminder
+  res.status(201).json({
+    message: 'Reminder added'
     });
+  console.log("Reminder Added")
   });
 }
-
-function createReminder (req, res) {
-  const token = req.body.token;
-  const task = req.body.task;
-
-  try {
-  jwt.verify(token, web_token_key, async (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Invalid token' });
-    } else {
-      addReminderToDatabase({userID,task, title} = task)
-    }
-  }
-  )
-} catch {
-  return res.status(401).json({ message: 'Failed to add reminder' });
-}
-}
-
-
+)}
 
 module.exports = {
   createUser,
   loginUser,
   validateToken,
-  getReminders
+  getReminders,
+  addReminder
 };
