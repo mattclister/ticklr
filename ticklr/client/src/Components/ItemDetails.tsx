@@ -7,11 +7,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // Zod schema
 const itemSchema = z.object({
-  date: z
-    .string()
-    .refine((val) => !isNaN(new Date(val).getTime()), {
-      message: "Invalid date format",
-    }),
+  date: z.string().refine((val) => !isNaN(new Date(val).getTime()), {
+    message: "Invalid date format",
+  }),
   reminder: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
   number: z
     .string()
@@ -19,17 +17,20 @@ const itemSchema = z.object({
     .refine((val) => !isNaN(val) && val >= 1 && val <= 365, {
       message: "Must be between 1 and 365",
     }),
-  unit_time: z.enum(["Day", "Week", "Month", "Year"]),
+  unit_time: z.enum(["day", "week", "month", "year"]),
 });
 
 export type NewReminderType = z.infer<typeof itemSchema>;
 
 export type ItemDetailsProps = {
-  setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>,
-  ReRenderRemindersList: () => void
+  setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  ReRenderRemindersList: () => void;
 };
 
-export const ItemDetails = ({setBottomBarVisible, ReRenderRemindersList}: ItemDetailsProps) => {
+export const ItemDetails = ({
+  setBottomBarVisible,
+  ReRenderRemindersList,
+}: ItemDetailsProps) => {
   const {
     register,
     handleSubmit,
@@ -45,7 +46,7 @@ export const ItemDetails = ({setBottomBarVisible, ReRenderRemindersList}: ItemDe
   const onSubmit = async (data: NewReminderType) => {
     try {
       await addReminder(data, setBottomBarVisible);
-        ReRenderRemindersList();
+      ReRenderRemindersList();
       reset();
     } catch (error) {
       console.error("Error adding reminder:", error);
@@ -99,17 +100,17 @@ export const ItemDetails = ({setBottomBarVisible, ReRenderRemindersList}: ItemDe
             )}
           </div>
           <div className="col-4 me-0">
-          <label className="form-label">Every</label>
+            <label className="form-label">Every</label>
             <select
               {...register("unit_time")}
               id="unit_time"
               className="form-control"
               defaultValue="Day"
             >
-              <option value="Day">Day(s)</option>
-              <option value="Week">Week(s)</option>
-              <option value="Month">Month(s)</option>
-              <option value="Year">Year(s)</option>
+              <option value="day">Day(s)</option>
+              <option value="week">Week(s)</option>
+              <option value="month">Month(s)</option>
+              <option value="year">Year(s)</option>
             </select>
             {errors.unit_time && (
               <p className="text-danger">{errors.unit_time.message}</p>
@@ -130,7 +131,7 @@ export const ItemDetails = ({setBottomBarVisible, ReRenderRemindersList}: ItemDe
             <p className="text-danger">{errors.reminder.message}</p>
           )}
         </div>
-        <button type="button" className="btn btn-warning w-100 mt-3">
+        <button type="button" onClick={()=>setBottomBarVisible(false)} className="btn btn-warning w-100 mt-3">
           Cancel
         </button>
         <button type="submit" className="btn btn-primary w-100 login-btn">

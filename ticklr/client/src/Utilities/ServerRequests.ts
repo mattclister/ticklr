@@ -83,12 +83,14 @@ export const getReminders = async () => {
 // Add Reminder
 
 export const addReminder = async (newReminder: NewReminderType, setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>) => {
-  calcReminderDate(newReminder)
+  const postableReminder = (calcReminderDate(newReminder))
+  console.log("Postable Reminder")
+  console.log(postableReminder)
   let token = localStorage.getItem("webToken");
-  
+
   apiClient.post(
     "/reminders",
-    newReminder,
+    postableReminder,
     {
       headers: { Authorization: `Bearer ${token}` },
     }

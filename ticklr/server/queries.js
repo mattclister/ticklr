@@ -158,7 +158,7 @@ async function getRemindersFromDatabase(userId) {
 async function addReminder(req, res) {
   const authHeader = req.headers.authorization;
   console.log(req.body)
-  const {date, number, reminder} = req.body;
+  const {date, recurs, reminder, reminder_date} = req.body;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(400).json({ message: 'Token is required' });
@@ -183,7 +183,7 @@ jwt.verify(token, web_token_key, async (err, decoded) => {
 // Add reminder to database
 const createReminderQuery = `INSERT INTO reminders (date, fk_user_id, recurs, title, reminder_date) VALUES (?, ?, ?, ?, ?)`;
 
-db.run(createReminderQuery, [date, tokenUserId, number, reminder, date], function (err) {
+db.run(createReminderQuery, [date, tokenUserId, recurs, reminder, reminder_date], function (err) {
   if (err) {
     console.error('Error inserting user:', err.message);
     return res.status(500).json({ error: 'Failed to create user' });
