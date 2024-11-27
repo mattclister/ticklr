@@ -82,7 +82,7 @@ export const getReminders = async () => {
 
 // Add Reminder
 
-export const addReminder = async (newReminder: NewReminderType, setBottomBarVisable: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const addReminder = async (newReminder: NewReminderType) => {
   const postableReminder = (calcReminderDate(newReminder))
   console.log("Postable Reminder")
   console.log(postableReminder)
@@ -96,7 +96,6 @@ export const addReminder = async (newReminder: NewReminderType, setBottomBarVisa
     }
   ).then((response) => {
       console.log("Reminder Added", response.data);
-      setBottomBarVisable(false)
     })
     .catch((error) => {
       console.error("Error adding reminder", error);

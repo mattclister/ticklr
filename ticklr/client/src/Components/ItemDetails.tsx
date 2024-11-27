@@ -4,6 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { addReminder } from "../Utilities/ServerRequests";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useState, useEffect } from "react";
+import { ReminderType } from "../Utilities/types";
+import dayjs from "dayjs";
 
 // Zod schema
 const itemSchema = z.object({
@@ -22,14 +25,18 @@ const itemSchema = z.object({
 
 export type NewReminderType = z.infer<typeof itemSchema>;
 
-export type ItemDetailsProps = {
+type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
   ReRenderRemindersList: () => void;
+  updateMode: boolean;
+  active: ReminderType | undefined;
 };
 
 export const ItemDetails = ({
   setBottomBarVisible,
   ReRenderRemindersList,
+  updateMode,
+  active,
 }: ItemDetailsProps) => {
   const {
     register,
@@ -43,18 +50,48 @@ export const ItemDetails = ({
     reValidateMode: "onSubmit",
   });
 
+  useEffect(() => {
+    const conversions = {
+      w: 'week',
+      d: 'day',
+      m: 'month',
+      y: 'year'
+    } as const;
+  
+    if (active) {
+      const unitkey = active.recurs?.slice(-1) as keyof typeof conversions;
+  
+      if (unitkey && conversions[unitkey]) {
+        reset({
+          date: dayjs(active.date as string).format('DD/MM/YY'),
+          reminder: active.title,
+          number: active.recurs.slice(0, -1) as unknown as number,
+          unit_time: conversions[unitkey]? conversions[unitkey] : "day"
+        });
+      } else {
+        console.warn(`Invalid unit in recurs: ${unitkey}`);
+        reset();
+      }
+    }
+  }, [active, reset]);
+  
+
   const onSubmit = async (data: NewReminderType) => {
     try {
-      await addReminder(data, setBottomBarVisible);
+      await addReminder(data);
       ReRenderRemindersList();
       reset();
+      setSuccessMessage("Reminder Added!!");
     } catch (error) {
       console.error("Error adding reminder:", error);
     }
   };
 
+  const [successMessage, setSuccessMessage] = useState("");
+
   return (
     <div className="container text-center">
+      <p className="text-success">{successMessage}</p>
       <form id="addReminder" onSubmit={handleSubmit(onSubmit)}>
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
           <div className="col-5 ms-0">
@@ -131,11 +168,18 @@ export const ItemDetails = ({
             <p className="text-danger">{errors.reminder.message}</p>
           )}
         </div>
-        <button type="button" onClick={()=>setBottomBarVisible(false)} className="btn btn-warning w-100 mt-3">
+        <button
+          type="button"
+          onClick={() => {
+            setBottomBarVisible(false);
+            setSuccessMessage("");
+          }}
+          className="btn btn-warning w-100 mt-3"
+        >
           Cancel
         </button>
         <button type="submit" className="btn btn-primary w-100 login-btn">
-          Confirm
+          Add New
         </button>
       </form>
     </div>

@@ -3,9 +3,9 @@ export interface StateProps {
 
 export type ReminderType = {
     pk_reminder_id: Number,
-    title: String,
-    date: String,
-    reminder_date: String,
-    fk_user_id: Number,
-    recurs: String
+    title: string,
+    date: string,
+    reminder_date: string,
+    fk_user_id: number,
+    recurs: string
 }

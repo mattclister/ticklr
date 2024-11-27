@@ -11,11 +11,13 @@ interface RemindersPageProps {
 }
 
 export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
+
   const [topBarVisible, settopBarVisible] = useState(false);
   const [bottomBarVisible, setBottomBarVisible] = useState(false);
   const [remindersKey, setRemindersKey] = useState(0);
-  const [active, setActive] = useState<Number | undefined>();
-  const [reminderdata, setReminderData] = useState<ReminderType[]>([]);
+  const [active, setActive] = useState<ReminderType | undefined>();
+  const [reminderdata, setReminderData] = useState<ReminderType[] | undefined>();
+  const [updateMode, setUpdateMode] = useState(false)
 
   // Function to re-render remindersList
   const ReRenderRemindersList = () => {
@@ -68,6 +70,8 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
         <ItemDetails
           setBottomBarVisible={setBottomBarVisible}
           ReRenderRemindersList={ReRenderRemindersList}
+          updateMode={updateMode}
+          active={active}
         />
       </div>
       <div

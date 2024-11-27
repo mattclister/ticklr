@@ -6,22 +6,25 @@ import React from "react";
 
 interface Props {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setActive: React.Dispatch<React.SetStateAction<Number | undefined>>;
-  active: Number | undefined;
-  reminderdata: ReminderType[];
-  setReminderData: React.Dispatch<React.SetStateAction<ReminderType[]>>
+  setActive: React.Dispatch<React.SetStateAction<ReminderType | undefined>>;
+  active: ReminderType | undefined;
+  reminderdata: ReminderType[] | undefined;
+  setReminderData: React.Dispatch<React.SetStateAction<ReminderType[] | undefined>>
 }
 
 export const RemindersList = ({ setBottomBarVisible, setActive, active, reminderdata, setReminderData}: Props) => {
-  // const [reminderdata, setReminderData] = useState<ReminderType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const activehandler = (reminderdata: ReminderType[], id: Number) => {
+    setActive(reminderdata.filter((item) => item.pk_reminder_id === id)[0])
+    setBottomBarVisible(true)
+  }
 
   useEffect(() => {
     const fetchReminders = async () => {
       try {
         console.log(`Fetching Reminders...`);
-        const requestedData = await getReminders();
-        console.log(requestedData);
+        const requestedData:ReminderType[] = await getReminders();
         setReminderData(requestedData);
         setLoading(false);
       } catch (error) {
@@ -49,9 +52,9 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
         <ul id="reminders-list" className="list-group" >
           {reminderdata.map((item) => (
             <li
-              className={`list-group-item${item.pk_reminder_id === active ? " active" : ""}`}
+              className={`list-group-item${item.pk_reminder_id === active?.pk_reminder_id ? " active" : ""}`}
               key={item.pk_reminder_id.toString()}
-              onClick={() => setActive(item.pk_reminder_id)}
+              onClick={() => activehandler(reminderdata,item.pk_reminder_id)}
             >
               <div className="row align-items-start">
                 <div className="col">
