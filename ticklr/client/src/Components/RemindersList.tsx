@@ -35,6 +35,11 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
     fetchReminders();
   }, []);
 
+  const onAddNew = () => {
+    setActive(undefined)
+    setBottomBarVisible(true)
+  }
+
   return (
     <>
       {reminderdata === undefined ? (
@@ -54,7 +59,11 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
             <li
               className={`list-group-item${item.pk_reminder_id === active?.pk_reminder_id ? " active" : ""}`}
               key={item.pk_reminder_id.toString()}
-              onClick={() => activehandler(reminderdata,item.pk_reminder_id)}
+              onClick={() => {
+                console.log("clicked");
+                console.log(item.pk_reminder_id);
+                console.log(reminderdata);
+                activehandler(reminderdata,item.pk_reminder_id)}}
             >
               <div className="row align-items-start">
                 <div className="col">
@@ -69,7 +78,7 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
             {" "}
             <button
               id="add-new-item-btn"
-              onClick={() => setBottomBarVisible(true)}
+              onClick={() => onAddNew()}
               className="btn btn-outline-secondary"
             >
               + add new item

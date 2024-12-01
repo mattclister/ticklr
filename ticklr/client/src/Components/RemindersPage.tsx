@@ -31,7 +31,8 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
           id="add-new-item-menu-btn"
           className="btn btn-outline-secondary menu-button"
           onClick={() => {
-            setBottomBarVisible(!bottomBarVisible);
+            setActive(undefined)
+            setBottomBarVisible(true);
             settopBarVisible(false);
           }}
         >
@@ -72,6 +73,7 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
           ReRenderRemindersList={ReRenderRemindersList}
           updateMode={updateMode}
           active={active}
+          setActive={setActive}
         />
       </div>
       <div

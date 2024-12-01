@@ -27,6 +27,7 @@ export type NewReminderType = z.infer<typeof itemSchema>;
 
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setActive: React.Dispatch<React.SetStateAction<ReminderType | undefined>>;
   ReRenderRemindersList: () => void;
   updateMode: boolean;
   active: ReminderType | undefined;
@@ -35,6 +36,7 @@ type ItemDetailsProps = {
 export const ItemDetails = ({
   setBottomBarVisible,
   ReRenderRemindersList,
+  setActive,
   updateMode,
   active,
 }: ItemDetailsProps) => {
@@ -52,39 +54,59 @@ export const ItemDetails = ({
 
   useEffect(() => {
     const conversions = {
-      w: 'week',
-      d: 'day',
-      m: 'month',
-      y: 'year'
+      w: "week",
+      d: "day",
+      m: "month",
+      y: "year",
     } as const;
-  
+
     if (active) {
       const unitkey = active.recurs?.slice(-1) as keyof typeof conversions;
-  
+
       if (unitkey && conversions[unitkey]) {
         reset({
-          date: dayjs(active.date as string).format('DD/MM/YY'),
+          date: dayjs(active.date as string).format("DD/MM/YY"),
           reminder: active.title,
           number: active.recurs.slice(0, -1) as unknown as number,
-          unit_time: conversions[unitkey]? conversions[unitkey] : "day"
+          unit_time: conversions[unitkey],
         });
       } else {
         console.warn(`Invalid unit in recurs: ${unitkey}`);
-        reset();
+        resetFormToBlank();
       }
     }
+
+    if (!active) {
+      console.log("no active reminder, reseting...");
+      resetFormToBlank();
+      console.log(active);
+    }
   }, [active, reset]);
-  
+
+  const resetFormToBlank = () =>
+    reset({
+      date: "",
+      reminder: "",
+      number: "" as unknown as number,
+      unit_time: "day",
+    });
 
   const onSubmit = async (data: NewReminderType) => {
     try {
       await addReminder(data);
       ReRenderRemindersList();
-      reset();
+      resetFormToBlank();
       setSuccessMessage("Reminder Added!!");
     } catch (error) {
       console.error("Error adding reminder:", error);
     }
+  };
+
+  const onCancel = () => {
+    setBottomBarVisible(false); // Hides items details
+    setActive(undefined); // Sets the "active" reminder to blank
+    resetFormToBlank();
+    setSuccessMessage(""); // Removes any "Reminder added message"
   };
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -168,19 +190,45 @@ export const ItemDetails = ({
             <p className="text-danger">{errors.reminder.message}</p>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setBottomBarVisible(false);
-            setSuccessMessage("");
-          }}
-          className="btn btn-warning w-100 mt-3"
-        >
-          Cancel
-        </button>
-        <button type="submit" className="btn btn-primary w-100 login-btn">
-          Add New
-        </button>
+
+        {!active ? (
+          <div>
+            <button
+              type="button"
+              onClick={() => onCancel()}
+              className="btn btn-warning w-100 mt-3"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary w-100 login-btn">
+              Add New
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {active ? (
+          <div>
+            <div className="btn-group w-100" role="group">
+            <button
+              type="button"
+              onClick={() => onCancel()}
+              className="btn btn-warning w-100 mt-3"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-danger w-100 login-btn">
+              Delete
+            </button>
+            </div>
+            <button type="submit" className="btn btn-primary w-100 login-btn">
+              Update
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );
