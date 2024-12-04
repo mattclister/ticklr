@@ -153,17 +153,19 @@ async function getRemindersFromDatabase(userId) {
 });
 }
 
-// Create Reminder
+// Create / Update Reminder
 
 async function addReminder(req, res) {
   const authHeader = req.headers.authorization;
   console.log(req.body)
   const {date, recurs, reminder, reminder_date} = req.body;
 
+  // if header missing return error
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(400).json({ message: 'Token is required' });
   }
 
+  // if no token return error
   const token = authHeader.split(' ')[1];
 
   if (!token) {
@@ -179,6 +181,33 @@ jwt.verify(token, web_token_key, async (err, decoded) => {
 // Get user id from token
   const tokenUserId = decoded.userId;
   console.log(`Adding Reminders, the decoded userId is: ${tokenUserId}`) 
+
+  // if user id in request, update. else add to database.
+
+  if (req.body.pk_reminder_id) {
+    const pk_reminder_id = req.body.pk_reminder_id;
+  
+    const updateReminderQuery = `
+      UPDATE reminders
+      SET date = ?, recurs = ?, title = ?, reminder_date = ?
+      WHERE pk_reminder_id = ?;
+    `;
+  
+    const values = [date, recurs, reminder, reminder_date, pk_reminder_id];
+  
+    db.run(updateReminderQuery, values, function(err) {
+      if (err) {
+        console.error("Error updating reminder:", err.message);
+        res.status(500).send("Database error");
+      } else {
+        console.log("Reminder Updated")
+        res.status(200).send("Reminder updated successfully");
+      }
+    });
+  } 
+  
+  if (!req.body.pk_reminder_id) {
+
 
 // Add reminder to database
 const createReminderQuery = `INSERT INTO reminders (date, fk_user_id, recurs, title, reminder_date) VALUES (?, ?, ?, ?, ?)`;
@@ -196,7 +225,7 @@ db.run(createReminderQuery, [date, tokenUserId, recurs, reminder, reminder_date]
   console.log("Reminder Added")
   });
 }
-)}
+})}
 
 module.exports = {
   createUser,

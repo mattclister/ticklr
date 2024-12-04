@@ -23,13 +23,17 @@ const itemSchema = z.object({
   unit_time: z.enum(["day", "week", "month", "year"]),
 });
 
-export type NewReminderType = z.infer<typeof itemSchema>;
+// Creating the type for reminders sent to server. if the optional id is included, the item will be updated, otherwise it will be added.
+type zodNewReminderType = z.infer<typeof itemSchema>;
+
+export type NewReminderType = zodNewReminderType & {
+  pk_reminder_id?: number;
+};
 
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setActive: React.Dispatch<React.SetStateAction<ReminderType | undefined>>;
   ReRenderRemindersList: () => void;
-  updateMode: boolean;
   active: ReminderType | undefined;
 };
 
@@ -37,7 +41,6 @@ export const ItemDetails = ({
   setBottomBarVisible,
   ReRenderRemindersList,
   setActive,
-  updateMode,
   active,
 }: ItemDetailsProps) => {
   const {
@@ -46,11 +49,15 @@ export const ItemDetails = ({
     control,
     reset,
     formState: { errors },
+    formState,
   } = useForm<NewReminderType>({
     resolver: zodResolver(itemSchema),
     mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
+  const [edited, setEdited] = useState(false);
+
+  // Side effects to run if an active item is selected. Coverting item to details format.
 
   useEffect(() => {
     const conversions = {
@@ -65,7 +72,7 @@ export const ItemDetails = ({
 
       if (unitkey && conversions[unitkey]) {
         reset({
-          date: dayjs(active.date as string).format("DD/MM/YY"),
+          date: dayjs(active.date as string).format("YYYY-MM-DD"),
           reminder: active.title,
           number: active.recurs.slice(0, -1) as unknown as number,
           unit_time: conversions[unitkey],
@@ -83,6 +90,8 @@ export const ItemDetails = ({
     }
   }, [active, reset]);
 
+  // Clear Form
+
   const resetFormToBlank = () =>
     reset({
       date: "",
@@ -91,29 +100,65 @@ export const ItemDetails = ({
       unit_time: "day",
     });
 
+  // Submission
+
   const onSubmit = async (data: NewReminderType) => {
     try {
-      await addReminder(data);
-      ReRenderRemindersList();
-      resetFormToBlank();
-      setSuccessMessage("Reminder Added!!");
+      const submissionData = {
+        ...data,
+        ...(active?.pk_reminder_id && {
+          pk_reminder_id: active.pk_reminder_id,
+        }),
+      };
+      await addReminder(submissionData);
+
+      if (!active) {
+        ReRenderRemindersList();
+        resetFormToBlank();
+        setSuccessMessage("Reminder Added!!");
+        setEdited(false);
+      }
+
+      if (active) {
+        ReRenderRemindersList();
+        setSuccessMessage("Reminder Updated!!");
+        setEdited(false);
+      }
     } catch (error) {
       console.error("Error adding reminder:", error);
+      setSuccessMessage("Failed to update");
     }
   };
+
+  // Cancelation
 
   const onCancel = () => {
     setBottomBarVisible(false); // Hides items details
     setActive(undefined); // Sets the "active" reminder to blank
     resetFormToBlank();
-    setSuccessMessage(""); // Removes any "Reminder added message"
+    setSuccessMessage(" "); // Removes any "Reminder added message"
+    setEdited(false);
   };
 
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(" ");
+
+  // Handler for field changes. Controls button activation, and success message.
+
+  const onChangeHandler = () => {
+    setEdited(true);
+    setSuccessMessage(" ");
+  };
+
+  // FORM JSX
 
   return (
     <div className="container text-center">
-      <p className="text-success">{successMessage}</p>
+      <p
+        className="text-success"
+        style={{ color: "green", minHeight: "1.5em" }}
+      >
+        {successMessage}
+      </p>
       <form id="addReminder" onSubmit={handleSubmit(onSubmit)}>
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
           <div className="col-5 ms-0">
@@ -128,13 +173,19 @@ export const ItemDetails = ({
                   {...field}
                   id="DatePickerField"
                   className="form-control w-100 mw-100"
-                  selected={field.value ? new Date(field.value) : null}
+                  selected={
+                    field.value && dayjs(field.value, "YYYY-MM-DD").isValid()
+                      ? dayjs(field.value, "YYYY-MM-DD").toDate()
+                      : null
+                  }
                   onChange={(date: Date | null) => {
-                    field.onChange(
-                      date ? date.toISOString().split("T")[0] : ""
-                    );
+                    const formattedDate = date
+                      ? dayjs(date).format("YYYY-MM-DD")
+                      : null;
+                    field.onChange(formattedDate);
+                    onChangeHandler();
                   }}
-                  dateFormat="yyyy-MM-dd"
+                  dateFormat="dd/MM/YYYY"
                   placeholderText="Select a date"
                 />
               )}
@@ -153,6 +204,7 @@ export const ItemDetails = ({
               type="number"
               min="1"
               max="365"
+              onChange={() => onChangeHandler()}
             />
             {errors.number && (
               <p className="text-danger">{errors.number.message}</p>
@@ -165,6 +217,7 @@ export const ItemDetails = ({
               id="unit_time"
               className="form-control"
               defaultValue="Day"
+              onChange={() => onChangeHandler()}
             >
               <option value="day">Day(s)</option>
               <option value="week">Week(s)</option>
@@ -185,6 +238,7 @@ export const ItemDetails = ({
             id="Reminder"
             className="form-control"
             type="text"
+            onChange={() => onChangeHandler()}
           />
           {errors.reminder && (
             <p className="text-danger">{errors.reminder.message}</p>
@@ -200,7 +254,11 @@ export const ItemDetails = ({
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary w-100 login-btn">
+            <button
+              type="submit"
+              disabled={!edited}
+              className="btn btn-primary w-100 login-btn"
+            >
               Add New
             </button>
           </div>
@@ -211,18 +269,22 @@ export const ItemDetails = ({
         {active ? (
           <div>
             <div className="btn-group w-100" role="group">
-            <button
-              type="button"
-              onClick={() => onCancel()}
-              className="btn btn-warning w-100 mt-3"
-            >
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-danger w-100 login-btn">
-              Delete
-            </button>
+              <button
+                type="button"
+                onClick={() => onCancel()}
+                className="btn btn-warning w-100 mt-3"
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-danger w-100 login-btn">
+                Delete
+              </button>
             </div>
-            <button type="submit" className="btn btn-primary w-100 login-btn">
+            <button
+              type="submit"
+              disabled={!edited}
+              className="btn btn-primary w-100 login-btn"
+            >
               Update
             </button>
           </div>

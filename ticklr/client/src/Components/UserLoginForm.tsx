@@ -30,13 +30,10 @@ export const UserLoginForm = ({handleSetLogIn}:LoginProps ) => {
         setFailedToLogin(failedToLogin+1)
       }
 
-
-
     } catch (error) {
       console.log("Login Failed");
     }
   };
-
 
   return (
     <div>
