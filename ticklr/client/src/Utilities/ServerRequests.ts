@@ -101,3 +101,22 @@ export const addReminder = async (newReminder: NewReminderType) => {
       console.error("Error adding reminder", error);
     });
 };
+
+// Update Settings
+
+export const postReminderEmail = async (reminderEmail: string | undefined) => {
+  let token = localStorage.getItem("webToken");
+
+  apiClient.post(
+    "/settings",
+    {email: reminderEmail},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  ).then((response) => {
+      console.log("Settings updated", response.data);
+    })
+    .catch((error) => {
+      console.error("Error updating settings", error);
+    });
+};
