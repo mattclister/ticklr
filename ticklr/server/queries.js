@@ -1,7 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const web_token_key = "abc123";
+require('dotenv').config();
+
+const web_token_key = process.env.WEBTOKEN_KEY
+
 
 const db = new sqlite3.Database("./ticklerDB.db", (err) => {
   if (err) {

@@ -6,7 +6,25 @@ const bcrypt = require('bcrypt');
 const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings} = require('./queries')
 const cron = require('node-cron');
 const {sendEmails} = require('./scheduled_functions')
+const readline = require('readline');
+require('dotenv').config();
+const mailgun_api_key = process.env.MAILGUN_API_KEY
 
+
+// Command Console Connection
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  
+  rl.on('line', (input) => {
+    if (input.trim() === 'send-emails') {
+      console.log('Manual email trigger received via CLI.');
+      sendEmails();
+    } else {
+      console.log(`Unknown command: ${input}`);
+    }
+  });
 
 // Tell express to parse json when request header says body is json
 app.use(express.json());
