@@ -7,8 +7,6 @@ const {createUser, loginUser, validateToken, getReminders, addReminder, updateSe
 const cron = require('node-cron');
 const {sendEmails} = require('./scheduled_functions')
 const readline = require('readline');
-require('dotenv').config();
-const mailgun_api_key = process.env.MAILGUN_API_KEY
 
 
 // Command Console Connection
