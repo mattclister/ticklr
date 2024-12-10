@@ -133,9 +133,9 @@ export const ItemDetails = ({
   // Cancelation
 
   const onCancel = () => {
-    setBottomBarVisible(false); // Hides items details
     setActive(undefined); // Sets the "active" reminder to blank
-    resetFormToBlank();
+    resetFormToBlank(); // Can't use reset() as resets to prefilled values. Used a custom function to clear the form.
+    setBottomBarVisible(false); // Hides items details
     setSuccessMessage(" "); // Removes any "Reminder added message"
     setEdited(false);
   };
@@ -153,12 +153,7 @@ export const ItemDetails = ({
 
   return (
     <div className="container text-center">
-      <p
-        className="text-success"
-        style={{ color: "green", minHeight: "1.5em" }}
-      >
-        {successMessage}
-      </p>
+      <h3>{active? "Update": "Add New"}</h3>
       <form id="addReminder" onSubmit={handleSubmit(onSubmit)}>
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
           <div className="col-5 ms-0">
@@ -250,7 +245,7 @@ export const ItemDetails = ({
             <button
               type="button"
               onClick={() => onCancel()}
-              className="btn btn-warning w-100 mt-3"
+              className="btn btn-outline-warning w-100 mt-3"
             >
               Cancel
             </button>
@@ -272,11 +267,11 @@ export const ItemDetails = ({
               <button
                 type="button"
                 onClick={() => onCancel()}
-                className="btn btn-warning w-100 mt-3"
+                className="btn btn-outline-warning w-100 mt-3"
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-danger w-100 login-btn">
+              <button type="submit" className="btn btn-outline-danger w-100 login-btn">
                 Delete
               </button>
             </div>

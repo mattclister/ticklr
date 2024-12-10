@@ -5,18 +5,20 @@ import logo from "../assets/ticklrLogo.png";
 import topbar from "../assets/list.svg";
 import { ItemDetails } from "./ItemDetails";
 import { ReminderType } from "../Utilities/types";
+import { AnimatePresence,motion } from "framer-motion";
 
 interface RemindersPageProps {
   handleLogOut: () => void;
 }
 
 export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
-
-  const [topBarVisible, settopBarVisible] = useState(false);
+  const [topBarVisible, setTopBarVisible] = useState(false);
   const [bottomBarVisible, setBottomBarVisible] = useState(false);
   const [remindersKey, setRemindersKey] = useState(0);
   const [active, setActive] = useState<ReminderType | undefined>();
-  const [reminderdata, setReminderData] = useState<ReminderType[] | undefined>();
+  const [reminderdata, setReminderData] = useState<
+    ReminderType[] | undefined
+  >();
 
   // Function to re-render remindersList
   const ReRenderRemindersList = () => {
@@ -30,9 +32,9 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
           id="add-new-item-menu-btn"
           className="btn btn-outline-secondary menu-button"
           onClick={() => {
-            setActive(undefined)
+            setActive(undefined);
             setBottomBarVisible(true);
-            settopBarVisible(false);
+            setTopBarVisible(false);
           }}
         >
           {" "}
@@ -40,10 +42,10 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
         </button>
         <img src={logo} id="logo-small-left" alt="Logo" className="menu-item" />
         <button
-          id="add-new-item-btn"
+          id="open-settings-menu-btn"
           className="btn btn-outline-secondary menu-button"
           onClick={() => {
-            settopBarVisible(!topBarVisible);
+            setTopBarVisible(true);
             setBottomBarVisible(false);
           }}
         >
@@ -62,24 +64,58 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
         active={active}
         reminderdata={reminderdata}
         setReminderData={setReminderData}
+        setTopBarVisible={setTopBarVisible}
+        topBarVisible={topBarVisible}
+        bottomBarVisible={bottomBarVisible}
       />
-      <div
-        id="details-panel"
-        className={`${bottomBarVisible ? "visible" : "hidden"}`}
-      >
-        <ItemDetails
-          setBottomBarVisible={setBottomBarVisible}
-          ReRenderRemindersList={ReRenderRemindersList}
-          active={active}
-          setActive={setActive}
-        />
+        <AnimatePresence>
+        {bottomBarVisible && (
+        <motion.div
+          id="details-panel"
+          initial={{ y: "100%" }}
+          animate={{ y: "0%" }}
+          exit={{ y: "100%" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          style={{
+            height: "55vh",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            maxWidth: "1000px",
+          }}
+        >
+          <ItemDetails
+            setBottomBarVisible={setBottomBarVisible}
+            active={active}
+            setActive={setActive}
+            ReRenderRemindersList={ReRenderRemindersList}
+          />
+        </motion.div>)}
+        </AnimatePresence>
+        <AnimatePresence>
+        {topBarVisible && (
+        <motion.div
+          id="settings-panel"
+          initial={{ y: "100%" }}
+          animate={{ y: "0%" }}
+          exit={{ y: "100%" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            height: "55vh",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            maxWidth: "1000px",
+          }}
+        >
+          <Settings
+            handleLogOut={handleLogOut}
+            settopBarVisible={setTopBarVisible}
+          />
+        </motion.div>)}
+        </AnimatePresence>
       </div>
-      <div
-        id="settings-panel"
-        className={`${topBarVisible ? "visible" : "hidden"}`}
-      >
-        <Settings handleLogOut={handleLogOut} settopBarVisible={settopBarVisible}/>
-      </div>
-    </div>
   );
 };

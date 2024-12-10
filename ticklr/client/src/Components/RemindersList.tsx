@@ -3,21 +3,25 @@ import { getReminders } from "../Utilities/ServerRequests";
 import { ReminderType } from "../Utilities/types";
 import dayjs from 'dayjs';
 import React from "react";
+import { boolean } from "zod";
 
 interface Props {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setActive: React.Dispatch<React.SetStateAction<ReminderType | undefined>>;
   active: ReminderType | undefined;
   reminderdata: ReminderType[] | undefined;
-  setReminderData: React.Dispatch<React.SetStateAction<ReminderType[] | undefined>>
-}
+  setReminderData: React.Dispatch<React.SetStateAction<ReminderType[] | undefined>>;
+  setTopBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  bottomBarVisible: boolean;
+  topBarVisible: boolean;}
 
-export const RemindersList = ({ setBottomBarVisible, setActive, active, reminderdata, setReminderData}: Props) => {
+export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive, active, reminderdata, setReminderData, bottomBarVisible, topBarVisible}: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const activehandler = (reminderdata: ReminderType[], id: Number) => {
     setActive(reminderdata.filter((item) => item.pk_reminder_id === id)[0])
     setBottomBarVisible(true)
+    setTopBarVisible(false)
   }
 
   useEffect(() => {
@@ -40,6 +44,8 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
     setBottomBarVisible(true)
   }
 
+  if(loading){return <p>"loading..."</p>} else {
+
   return (
     <>
       {reminderdata === undefined ? (
@@ -55,26 +61,23 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
         </li>
       ) : (
         <ul id="reminders-list" className="list-group" >
-          {reminderdata.map((item) => (
+          {reminderdata.sort((a,b)=>dayjs(a.reminder_date).valueOf() - dayjs(b.reminder_date).valueOf()).map((item) => (
             <li
-              className={`list-group-item${item.pk_reminder_id === active?.pk_reminder_id ? " active" : ""}`}
+              className={`list-group-item${item.pk_reminder_id === active?.pk_reminder_id ? " selected" : ""}`}
               key={item.pk_reminder_id.toString()}
               onClick={() => {
-                console.log("clicked");
-                console.log(item.pk_reminder_id);
-                console.log(reminderdata);
                 activehandler(reminderdata,item.pk_reminder_id)}}
             >
               <div className="row align-items-start">
                 <div className="col">
-                  <h6>{dayjs(item.date as string).format('DD-MMM')}</h6>
+                  <h6>{dayjs(item.reminder_date as string).format('DD-MMM')}</h6>
                 </div>
                 <div className="col">{item.title.length>40?item.title.slice(0,40)+"...":item.title}</div>
                 <div className="col">{item.recurs}</div>
               </div>
             </li>
           ))}
-          <li className="list-group-item">
+          <li id="add-new-item-row" className="list-group-item">
             {" "}
             <button
               id="add-new-item-btn"
@@ -84,8 +87,12 @@ export const RemindersList = ({ setBottomBarVisible, setActive, active, reminder
               + add new item
             </button>
           </li>
-        </ul>
+          <li className="list-group-item">
+          {bottomBarVisible || topBarVisible? <div id="blank_div" style={{height: "55vh"}}></div>: null}
+          </li>
+        </ul>   
       )}
     </>
   );
+};
 };

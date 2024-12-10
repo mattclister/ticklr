@@ -24,6 +24,13 @@ const rl = readline.createInterface({
     }
   });
 
+// Documentation route
+
+const docsRouter = express.Router();
+docsRouter.use(express.static(path.join(__dirname, '../user_documentation/build')));
+app.use('/docs', docsRouter);
+
+
 // Tell express to parse json when request header says body is json
 app.use(express.json());
 
@@ -50,6 +57,10 @@ app.post("/reminders", addReminder);
 // Update settings
 app.post("/settings", updateSettings);
 
+// Fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 
 // Start the server
 app.listen(port, () => {

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { RemindersPage } from "./Components/RemindersPage";
 import { AuthenticateUser } from "./Utilities/ServerRequests";
 
-
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);

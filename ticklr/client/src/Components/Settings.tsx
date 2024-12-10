@@ -53,7 +53,7 @@ const Settings = ({ handleLogOut, settopBarVisible }: SettingsTabProps) => {
         </button>
 
         <hr className="border border-3 opacity-75 w-100 mt-4" />
-
+        <div className="btn-group w-100" role="group">
         <button
           type="button"
           className="btn btn-warning w-100 mt-3"
@@ -68,6 +68,7 @@ const Settings = ({ handleLogOut, settopBarVisible }: SettingsTabProps) => {
         >
           Log Out
         </button>
+        </div>
       </div>
 
       
