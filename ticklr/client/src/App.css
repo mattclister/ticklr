@@ -93,6 +93,13 @@ h2 {
   align-items: center;
 }
 
+.form-control:focus {
+  border-color: #f8bd3b;
+  outline: solid 3px  #f8bd3b;
+  box-shadow: none;
+
+}
+
 /* Reminders List */
 
 .list-group-item.selected {
@@ -129,7 +136,7 @@ h2 {
 
 #reminders-list-header {
   background-color: #29D3A9;
-  border-bottom: solid #303846 3px;
+  border-bottom: solid #303846 2px;
   top: 0;
   z-index: 1000;
   padding: 10px 20px;
@@ -159,9 +166,12 @@ h2 {
   justify-content: center;
 }
 
-.menu-button:hover {
-  background-color: #fffaec;
-  color: black;
+.menu-icon {
+  stroke: #303846;
+}
+
+.menu-icon:hover {
+  stroke: #ebedf0;
 }
 
 #add-new-item-btn {
@@ -194,4 +204,65 @@ h2 {
   overflow-y: auto;
   height: auto;
   color: #ebedf0;
+}
+
+/* Login Page */
+
+.loginPage h1, h2, h3, h4 , p, label {
+  color: #ebedf0;
+}
+
+.login-btn {
+  color:#ebedf0;
+}
+
+#add-new-item-menu-btn {
+  width: 30px;
+  height: 30px;
+  background: none;
+  fill:none;
+}
+
+#add-new-item-menu-btn:hover {
+  width: 30px;
+  height: 30px;
+  background: none;
+  fill:none;
+}
+
+#open-settings-menu-btn {
+    width: 25px;
+    height: 25px;
+    background-image: url('/settings.png');
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    margin-top: 5px;
+    margin-right: 9px;
+}
+
+#open-settings-menu-btn:hover {
+  background-image: url('/settings-white.png'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}
+
+#add-new-menu-btn {
+    width: 28px;
+    height: 28px;
+    background-image: url('/addNew.png');
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    margin-top: 3px;
+}
+
+#add-new-menu-btn:hover {
+  background-image: url('/addNew-white.png'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
 }

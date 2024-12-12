@@ -3,6 +3,7 @@ import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import { NewReminderType } from "../Components/ItemDetails";
 import { calcReminderDate } from "../Utilities/helperFunctions";
+import { number } from "prop-types";
 
 
 const apiClient = axios.create({
@@ -102,6 +103,23 @@ export const addReminder = async (newReminder: NewReminderType) => {
     });
 };
 
+// Delete Reminder
+
+export const deleteReminder = async (activeID: number | undefined) => {
+  let token = localStorage.getItem("webToken");
+
+  apiClient
+  .delete(`/reminders/${activeID}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  .then((response) => {
+    console.log("Reminder Deleted", response.data);
+  })
+  .catch((error) => {
+    console.error("Error deleting reminder", error);
+  });
+}
+
 // Update Settings
 
 export const postReminderEmail = async (reminderEmail: string | undefined) => {
@@ -109,7 +127,7 @@ export const postReminderEmail = async (reminderEmail: string | undefined) => {
 
   apiClient.post(
     "/settings",
-    {email: reminderEmail},
+    {data: {email: reminderEmail}},
     {
       headers: { Authorization: `Bearer ${token}` },
     }

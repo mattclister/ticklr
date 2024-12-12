@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const bcrypt = require('bcrypt');
-const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings} = require('./queries')
+const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings, deleteReminder} = require('./queries')
 const cron = require('node-cron');
 const {sendEmails} = require('./scheduled_functions')
 const readline = require('readline');
@@ -30,7 +30,6 @@ const docsRouter = express.Router();
 docsRouter.use(express.static(path.join(__dirname, '../user_documentation/build')));
 app.use('/docs', docsRouter);
 
-
 // Tell express to parse json when request header says body is json
 app.use(express.json());
 
@@ -53,6 +52,9 @@ app.get("/reminders", getReminders);
 
 // Add reminder
 app.post("/reminders", addReminder);
+
+// Delete reminder
+app.delete("/reminders/:reminderId", deleteReminder);
 
 // Update settings
 app.post("/settings", updateSettings);

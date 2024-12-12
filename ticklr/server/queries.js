@@ -293,6 +293,66 @@ async function updateSettings(req, res) {
   });
 }
 
+// Delete Reminder
+
+async function deleteReminder(req, res) {
+  console.log("Request made for deletion")
+  const authHeader = req.headers?.authorization;
+  const { reminderId } = req?.params;
+  console.log(reminderId)
+
+  // if header missing return error
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(400).json({ message: "Token is required" });
+  }
+
+  // if no token return error
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(400).json({ message: "Token is required" });
+  }
+
+  if (!reminderId){
+    return res.status(400).json({ message: "Reminder ID is required" });
+  }
+
+  // Verify the token
+  jwt.verify(token, web_token_key, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    if (!decoded || !decoded.userId) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    
+
+    // Get user id from token
+    const tokenUserId = decoded.userId;
+    console.log(`Deleting Reminders, the decoded userId is: ${tokenUserId}`);
+  
+    // Check user id of reminder matches decoded userId and delete
+
+    const deleteReminderQuery = `
+    DELETE FROM reminders
+    WHERE pk_reminder_id = ? AND fk_user_id = ?
+  `
+
+  db.run(deleteReminderQuery, [reminderId, tokenUserId], function (err) {
+    if (this.changes === 0) {
+      return res.status(404).json({ message: "No reminder found to delete" });
+    }
+    if (err) {
+      console.error("Error deleting reminder:", err.message);
+      res.status(500).send("Reminder deletion Failed. Database error");
+    } else {
+      console.log("Reminder deleted");
+      res.status(200).send("Reminder deleted");
+    }
+  })
+  })
+}
+
 module.exports = {
   createUser,
   loginUser,
@@ -300,4 +360,5 @@ module.exports = {
   getReminders,
   addReminder,
   updateSettings,
+  deleteReminder
 };

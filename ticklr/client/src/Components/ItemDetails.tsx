@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addReminder } from "../Utilities/ServerRequests";
+import { addReminder, deleteReminder } from "../Utilities/ServerRequests";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
@@ -140,6 +140,17 @@ export const ItemDetails = ({
     setEdited(false);
   };
 
+  
+  const onDelete = () => {
+    deleteReminder(active?.pk_reminder_id)
+    resetFormToBlank()
+    setSuccessMessage("Remnder Deleted")
+    ReRenderRemindersList();
+    setEdited(false);
+  }
+
+
+  // Set submission success message
   const [successMessage, setSuccessMessage] = useState(" ");
 
   // Handler for field changes. Controls button activation, and success message.
@@ -271,7 +282,7 @@ export const ItemDetails = ({
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-outline-danger w-100 login-btn">
+              <button type='button' onClick={()=>onDelete()} className="btn btn-outline-danger w-100 login-btn">
                 Delete
               </button>
             </div>

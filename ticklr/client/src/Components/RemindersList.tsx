@@ -88,7 +88,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
             </button>
           </li>
           <li className="list-group-item">
-          {bottomBarVisible || topBarVisible? <div id="blank_div" style={{height: "55vh"}}></div>: null}
+          {bottomBarVisible || topBarVisible? <div id="blank_div" style={{height: "55vh", maxHeight: "430px", minHeight: "400px"}}></div>: null} {/*This enssures that the list is fully scrollable when the details panel is open.*/}
           </li>
         </ul>   
       )}

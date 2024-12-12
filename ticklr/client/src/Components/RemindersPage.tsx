@@ -2,7 +2,6 @@ import { useState } from "react";
 import { RemindersList } from "./RemindersList";
 import Settings from "./Settings";
 import logo from "../assets/ticklrLogo.png";
-import topbar from "../assets/list.svg";
 import { ItemDetails } from "./ItemDetails";
 import { ReminderType } from "../Utilities/types";
 import { AnimatePresence,motion } from "framer-motion";
@@ -29,32 +28,23 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
     <div id="reminders-page-container">
       <div id="reminders-list-header">
         <button
-          id="add-new-item-menu-btn"
-          className="btn btn-outline-secondary menu-button"
+          id="add-new-menu-btn"
           onClick={() => {
             setActive(undefined);
             setBottomBarVisible(true);
             setTopBarVisible(false);
           }}
         >
-          {" "}
-          +{" "}
         </button>
-        <img src={logo} id="logo-small-left" alt="Logo" className="menu-item" />
+        <img src={logo} id="logo" alt="Logo" className="menu-item" />
+        {/* Button image handled in style sheet */}
         <button
           id="open-settings-menu-btn"
-          className="btn btn-outline-secondary menu-button"
           onClick={() => {
             setTopBarVisible(true);
             setBottomBarVisible(false);
           }}
         >
-          <img
-            src={topbar}
-            id="settings-small-left"
-            alt="settings"
-            className="menu-button"
-          />
         </button>
       </div>
       <RemindersList
@@ -83,6 +73,8 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
             left: 0,
             width: "100%",
             maxWidth: "1000px",
+            maxHeight: "430px",
+            minHeight: "400px"
           }}
         >
           <ItemDetails
@@ -108,6 +100,8 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
             left: 0,
             width: "100%",
             maxWidth: "1000px",
+            maxHeight: "430px",
+            minHeight: "400px"
           }}
         >
           <Settings
