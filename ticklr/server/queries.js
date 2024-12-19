@@ -196,7 +196,7 @@ async function addReminder(req, res) {
     const tokenUserId = decoded.userId;
     console.log(`Adding Reminders, the decoded userId is: ${tokenUserId}`);
 
-    // if user id in request, update. else add to database.
+    // if reminder id in request, update. Else add to database.
 
     if (req.body.pk_reminder_id) {
       const pk_reminder_id = req.body.pk_reminder_id;
@@ -215,10 +215,16 @@ async function addReminder(req, res) {
           res.status(500).send("Database error");
         } else {
           console.log("Reminder Updated");
-          res.status(200).send("Reminder updated successfully");
+          res.status(200).json({
+            message: "Reminder updated successfully",
+            pk_reminder_id: this.lastID,
+            fk_user_id: tokenUserId
+          })
         }
       });
     }
+
+    // Temp ID's are < 0, so this is if the request has a temp id.
 
     if (!req.body.pk_reminder_id) {
       // Add reminder to database
@@ -236,6 +242,8 @@ async function addReminder(req, res) {
           // Successfully added the reminder
           res.status(201).json({
             message: "Reminder added",
+            pk_reminder_id: this.lastID,
+            fk_user_id: tokenUserId
           });
           console.log("Reminder Added");
         }
@@ -248,8 +256,8 @@ async function addReminder(req, res) {
 
 async function updateSettings(req, res) {
   const authHeader = req.headers.authorization;
-  const { email } = req.body;
-   console.log(req.body)
+  const { email } = req.body.data;
+   console.log(req.body.data)
    console.log(`Email being updated: ${email}`)
 
   // if header missing return error

@@ -3,7 +3,6 @@ import { getReminders } from "../Utilities/ServerRequests";
 import { ReminderType } from "../Utilities/types";
 import dayjs from 'dayjs';
 import React from "react";
-import { boolean } from "zod";
 
 interface Props {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,8 +19,6 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
 
   const activehandler = (reminderdata: ReminderType[], id: Number) => {
     setActive(reminderdata.filter((item) => item.pk_reminder_id === id)[0])
-    setBottomBarVisible(true)
-    setTopBarVisible(false)
   }
 
   useEffect(() => {
@@ -31,12 +28,15 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
         const requestedData:ReminderType[] = await getReminders();
         setReminderData(requestedData);
         setLoading(false);
+        console.log(requestedData)
+        console.log(requestedData[0])
       } catch (error) {
         console.error("Error fetching reminders:", error);
         setLoading(false);
       }
     };
     fetchReminders();
+
   }, []);
 
   const onAddNew = () => {
@@ -66,6 +66,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
               className={`list-group-item${item.pk_reminder_id === active?.pk_reminder_id ? " selected" : ""}`}
               key={item.pk_reminder_id.toString()}
               onClick={() => {
+                console.log(item.pk_reminder_id)
                 activehandler(reminderdata,item.pk_reminder_id)}}
             >
               <div className="row align-items-start">
@@ -87,9 +88,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
               + add new item
             </button>
           </li>
-          <li className="list-group-item">
-          {bottomBarVisible || topBarVisible? <div id="blank_div" style={{height: "55vh", maxHeight: "430px", minHeight: "400px"}}></div>: null} {/*This enssures that the list is fully scrollable when the details panel is open.*/}
-          </li>
+          {bottomBarVisible || topBarVisible?<li className="list-group-item"><div id="blank_div" style={{height: "55vh", maxHeight: "430px", minHeight: "400px"}}></div></li>: null} {/*This enssures that the list is fully scrollable when the details panel is open.*/}
         </ul>   
       )}
     </>

@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
 import { ReminderType } from "../Utilities/types";
 import dayjs from "dayjs";
+import { ConvertNewReminderToReminder } from "../Utilities/helperFunctions";
 
 // Zod schema
 const itemSchema = z.object({
@@ -33,15 +34,15 @@ export type NewReminderType = zodNewReminderType & {
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setActive: React.Dispatch<React.SetStateAction<ReminderType | undefined>>;
-  ReRenderRemindersList: () => void;
   active: ReminderType | undefined;
-};
+  setReminderData: React.Dispatch<React.SetStateAction<ReminderType[] | undefined>>;
+}
 
 export const ItemDetails = ({
   setBottomBarVisible,
-  ReRenderRemindersList,
   setActive,
   active,
+  setReminderData,
 }: ItemDetailsProps) => {
   const {
     register,
@@ -60,6 +61,7 @@ export const ItemDetails = ({
   // Side effects to run if an active item is selected. Coverting item to details format.
 
   useEffect(() => {
+
     const conversions = {
       w: "week",
       d: "day",
@@ -102,31 +104,75 @@ export const ItemDetails = ({
 
   // Submission
 
+  const [tempID,setTempId] = useState<number>(-1)
+
   const onSubmit = async (data: NewReminderType) => {
+    console.log(data)
+
+    const newTempID = tempID
+    console.log(`The temporary id is: ${newTempID}`)
+
     try {
       const submissionData = {
         ...data,
         ...(active?.pk_reminder_id && {
           pk_reminder_id: active.pk_reminder_id,
-        }),
+        })
       };
-      await addReminder(submissionData);
+
+      // Optamistically update state and GUI
+
+    if (!active){
+      const reminder = ConvertNewReminderToReminder(data,newTempID,newTempID)
+      console.log(`The converted Reminder (new) is:${JSON.stringify(reminder, null, 2)}`)
+      setReminderData(previousData => [
+        ...previousData || [], 
+        reminder
+    ]);}
+
+    if (active) {
+      const reminder = ConvertNewReminderToReminder(data,active.fk_user_id,active.pk_reminder_id)
+      console.log(`The converted Reminder (update) is:${JSON.stringify(reminder, null, 2)}`)
+      setReminderData(previousData =>
+        previousData?.map((item) =>
+          item.pk_reminder_id === active.pk_reminder_id ? { ...item, ...reminder} : item
+        )
+      );
+    }
+    
+      setTempId(prevTempId => prevTempId - 1);
+
+    await addReminder(submissionData).then((res) => {
+      console.log(res)
+      setReminderData((previousData) =>
+        previousData?.map((item) =>
+          item.pk_reminder_id === newTempID
+            ? { ...item, pk_reminder_id: res.pk_reminder_id, fk_user_id: res.fk_user_id }
+            : item
+        )
+      );
+    });
 
       if (!active) {
-        ReRenderRemindersList();
         resetFormToBlank();
         setSuccessMessage("Reminder Added!!");
         setEdited(false);
       }
-
+ 
       if (active) {
-        ReRenderRemindersList();
         setSuccessMessage("Reminder Updated!!");
         setEdited(false);
       }
-    } catch (error) {
+    } 
+        
+    catch (error) {
       console.error("Error adding reminder:", error);
       setSuccessMessage("Failed to update");
+
+      // Return to previous state if server request fails
+      setReminderData(previousData => 
+      !previousData? undefined: [...previousData.filter((item)=>item.pk_reminder_id!==-1)]
+    );
     }
   };
 
@@ -141,15 +187,36 @@ export const ItemDetails = ({
   };
 
   
-  const onDelete = () => {
-    deleteReminder(active?.pk_reminder_id)
-    resetFormToBlank()
-    setSuccessMessage("Remnder Deleted")
-    ReRenderRemindersList();
-    setEdited(false);
-  }
-
-
+  const onDelete = async () => {
+    // Check active is not null
+    if (!active) {
+      console.error("No active reminder selected for deletion.");
+      return;
+    }
+  
+    // Optimistic update
+    setReminderData((previousData) => {
+      if (!previousData) return [];
+      return previousData.filter((item) => item.pk_reminder_id !== active.pk_reminder_id);
+    });
+  
+    try {
+      // Call delete API
+      await deleteReminder(active.pk_reminder_id);
+      setSuccessMessage("Reminder Deleted");
+      resetFormToBlank();
+      setEdited(false);
+    } catch (error) {
+      // Rollback on failure
+      setReminderData((previousData) => [
+        ...(previousData || []),
+        active,
+      ]);
+      console.error("Failed to delete reminder:", error);
+      setSuccessMessage("Failed to delete reminder");
+    }
+  };
+  
   // Set submission success message
   const [successMessage, setSuccessMessage] = useState(" ");
 

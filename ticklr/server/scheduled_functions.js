@@ -1,16 +1,32 @@
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./ticklerDB.db");
 require('dotenv').config();
+const { returnReminderDate, RecursToUnit, RecursToNumber } = require('./ConversionFunctions.js');
 
 // Mailgun modules and constants
-const formData = require("form-data");
+const { FormData } = require('undici')
 const Mailgun = require("mailgun.js");
-const mailgun = new Mailgun(formData);
+const mailgun = new Mailgun(FormData);
 const mg = mailgun.client({
   username: "api",
   key: process.env.MAILGUN_SENDING_API_KEY,
   url: 'https://api.eu.mailgun.net'
 });
+
+const marksent = (record,sentDate) => {
+
+  const updateQuery = `UPDATE reminders 
+  SET last_sent = ?, reminder_date = ? 
+  WHERE fk_user_id = ?;`
+
+  const unit = RecursToUnit(record.recurs)
+  const number = RecursToNumber(record.recurs)
+
+  const newReminderDate = returnReminderDate(record.reminder_date,number,unit)
+
+  db.run(updateQuery,[sentDate,newReminderDate,record.fk_user_id])
+
+}
 
 const sendEmails = async () => {
   // Function to get records to email from db with reminder date older than NOW
@@ -51,11 +67,14 @@ const sendEmails = async () => {
           await mg.messages
             .create("ticklr.app", {
               from: "Reminders <reminders@ticklr.app>",
-              to: [records.reminder_email],
-              subject: records.title,
-              text: "Sent via tickler"
+              to: record.reminder_email,
+              subject: record.title,
+              text: `${record.title}
+              Sent via tickler`
             })
-            .then((msg) => console.log(msg))
+            .then((msg) => {console.log(msg);
+            marksent(record,new Date().toISOString())}
+          )
             .catch((err) => console.error("Mailgun error:", err.message));
             await delay(1000)
         } catch (error) {

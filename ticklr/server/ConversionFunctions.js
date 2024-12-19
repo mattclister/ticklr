@@ -1,11 +1,9 @@
-import { NewReminderType } from "../Components/ItemDetails"
-import { ReminderType } from "./types"
-import dayjs from "dayjs"
+const dayjs = require ("./node_modules/dayjs")
 
 
 // Calculate Reminder Date from start date and recurance. 
 
-export const calcReminderDate = function (newReminder: NewReminderType) {
+const calcReminderDate = function (newReminder) {
     const conversions = {
         week: { initial: "w" },
         day: { initial: "d" },
@@ -25,7 +23,7 @@ export const calcReminderDate = function (newReminder: NewReminderType) {
 
 // Return reminder date 
 
-export const returnReminderDate = function (date: string, number: number, unit_time: "day" | "week" | "month" | "year") {
+const returnReminderDate = function (date, number, unit_time) {
     const dateObject = dayjs(date)
     return dateObject.add(number, unit_time).toString()
 }
@@ -34,26 +32,23 @@ export const returnReminderDate = function (date: string, number: number, unit_t
 
 // Combine Number and Unit Time
 
-export const UnitAndNumberToRecurs = function (number: number, unit_time: "day" | "week" | "month" | "year"): string {
-    console.log('Converting Unit and Number')
-    console.log(number)
-    console.log(unit_time)
+const UnitAndNumberToRecurs = function (number, unit_time) {
 
     const conversions = {
         week: "w",
         day: "d",
         month: "m",
         year: "y",
-    } as const;
+    }
 
-    return number.toString() + conversions[unit_time]
+    return number.toString() && conversions[unit_time]
 }
 
 // Uncombine Number and Unit Time
 
 // Take recurs and return unit
 
-export const RecursToUnit = function (recurs:string): typeof conversions[keyof typeof conversions] {
+const RecursToUnit = function (recurs) {
 
     const conversions = {
         w: "week",
@@ -61,15 +56,15 @@ export const RecursToUnit = function (recurs:string): typeof conversions[keyof t
         m: "month",
         y: "year",
         default: "day"
-    } as const;
+    }
 
-    const key = recurs[recurs.length - 1] as keyof typeof conversions;
+    const key = recurs[recurs.length - 1];
     return conversions[key]
 }
 
 // Take recurs and return number
 
-export const RecursToNumber = function (recurs:string): number {
+const RecursToNumber = function (recurs) {
     return parseInt(recurs.slice(0,recurs.length-1))
 }
 
@@ -77,7 +72,7 @@ export const RecursToNumber = function (recurs:string): number {
 // Convert New Reminder Type to Reminder Type
 // If no reminder ID sets a temporary id of -1. This is used for optamistic updates.
 
-export const ConvertNewReminderToReminder = function (NewReminder: NewReminderType, fk_user_id: number, pk_reminder_id: number): ReminderType {
+const ConvertNewReminderToReminder = function (NewReminder, fk_user_id = -1, pk_reminder_id = -1) {
 
     return {
         date: NewReminder.date,
@@ -92,7 +87,7 @@ export const ConvertNewReminderToReminder = function (NewReminder: NewReminderTy
 // // Convert Reminder Type to New Remininder Type
 
 
-export const ConvertReminderToNewReminder = function (Reminder: ReminderType): NewReminderType {
+ const ConvertReminderToNewReminder = function (Reminder) {
 
     return {
             date: Reminder.date,
@@ -101,3 +96,13 @@ export const ConvertReminderToNewReminder = function (Reminder: ReminderType): N
             unit_time: RecursToUnit(Reminder.recurs)
     }
  }
+
+module.exports = {
+    calcReminderDate,
+    returnReminderDate,
+    UnitAndNumberToRecurs,
+    RecursToUnit,
+    RecursToNumber,
+    ConvertNewReminderToReminder,
+    ConvertReminderToNewReminder
+  };

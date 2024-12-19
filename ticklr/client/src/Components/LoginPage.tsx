@@ -27,6 +27,8 @@ export const LoginPage = ({ handleSetLogIn }: LoginProps) => {
       >
         {showSignUp ? "Login" : "Sign Up"}
       </button>
+      <div className="mt-3"><a href="/docs">What is Ticklr?</a>
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'My Site',
   tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/ticklrLogo.png',
   url: 'https://ticklr.app',
   baseUrl: '/docs/',
   onBrokenLinks: 'throw',
@@ -45,21 +45,27 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/ticklrLogo.png',
     navbar: {
       title: 'Ticklr',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Ticklr Logo',
+        src: 'img/ticklrLogo.png',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'todoist',
           position: 'left',
-          label: 'Ticklr',
+          label: 'Todoist',
           collapsible: 'false'
-        },
+        },{
+          type: 'docSidebar',
+          sidebarId: 'wonderlist',
+          position: 'left',
+          label: 'Wonderlist',
+          collapsible: 'false'
+        }
       ],
     },
     footer: {

@@ -132,6 +132,8 @@ h2 {
   max-width: 1000px;
   height: auto;
   position: relative;
+  background-color: #ffff;
+  height: 100%;
 }
 
 #reminders-list-header {
@@ -249,6 +251,25 @@ h2 {
   cursor: pointer;
 }
 
+#open-settings-menu-btn-toggled {
+  width: 25px;
+  height: 25px;
+  margin-top: 5px;
+  margin-right: 9px;
+  background-image: url('/settings-white.png'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+#open-settings-menu-btn-toggled:hover {
+  background-image: url('/settings.png'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}
+
 #add-new-menu-btn {
     width: 28px;
     height: 28px;
@@ -265,4 +286,44 @@ h2 {
   background-size: cover;
   border: none;
   cursor: pointer;
+}
+
+#add-new-menu-btn-toggled {
+  width: 28px;
+  height: 28px;
+  background-image: url('/addNew-white.png');
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  margin-top: 3px;
+}
+
+#add-new-menu-btn-toggled:hover {
+background-image: url('/addNew.png'); 
+background-size: cover;
+border: none;
+cursor: pointer;
+}
+
+#add-new-menu-btn-updating {
+  width: 28px;
+  height: 28px;
+  background-image: url('/addNew-orange.png');
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  margin-top: 3px;
+}
+
+#add-new-menu-btn-updating:hover {
+  background-image: url('/addNew-white.png'); 
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-outline-warning {
+  color: #ffff;
 }

@@ -3,7 +3,6 @@ import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import { NewReminderType } from "../Components/ItemDetails";
 import { calcReminderDate } from "../Utilities/helperFunctions";
-import { number } from "prop-types";
 
 
 const apiClient = axios.create({
@@ -84,24 +83,25 @@ export const getReminders = async () => {
 // Add Reminder
 
 export const addReminder = async (newReminder: NewReminderType) => {
-  const postableReminder = (calcReminderDate(newReminder))
-  console.log("Postable Reminder")
-  console.log(postableReminder)
+  const postableReminder = calcReminderDate(newReminder);
   let token = localStorage.getItem("webToken");
 
-  apiClient.post(
-    "/reminders",
-    postableReminder,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  ).then((response) => {
-      console.log("Reminder Added", response.data);
-    })
-    .catch((error) => {
-      console.error("Error adding reminder", error);
-    });
+  try {
+    const response = await apiClient.post(
+      "/reminders",
+      postableReminder,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log("Reminder Added", response.data);
+    return response.data; // Return the server's response
+  } catch (error) {
+    console.error("Error adding reminder", error);
+    throw error; // Rethrow the error if you need to handle it at a higher level
+  }
 };
+
 
 // Delete Reminder
 
@@ -114,8 +114,7 @@ export const deleteReminder = async (activeID: number | undefined) => {
   })
   .then((response) => {
     console.log("Reminder Deleted", response.data);
-  })
-  .catch((error) => {
+  }).catch ((error) => {
     console.error("Error deleting reminder", error);
   });
 }
