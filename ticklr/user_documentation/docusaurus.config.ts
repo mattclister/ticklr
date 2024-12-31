@@ -10,6 +10,9 @@ const config: Config = {
   favicon: 'img/ticklrLogo.png',
   url: 'https://ticklr.app',
   baseUrl: '/docs/',
+  customFields: {
+    reactAppUrl: 'http://localhost:3000/app', // UPDATE FOR PRODUCTION
+  },
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
@@ -24,8 +27,6 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
         },
         blog: {
           showReadingTime: true,
@@ -65,14 +66,17 @@ const config: Config = {
           position: 'left',
           label: 'Wonderlist',
           collapsible: 'false'
-        }
+        },
+       { to: 'http://localhost:3000/app', // UPDATE FOR PRODUCTION
+        label: 'Login',
+        position: 'right'}
       ],
     },
     footer: {
       style: 'dark',
       links: [
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()}Matt Lister.`,
     },
     prism: {
       theme: prismThemes.github,

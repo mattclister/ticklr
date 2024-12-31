@@ -5,7 +5,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings, deleteReminder} = require('./queries')
 const cron = require('node-cron');
-const {sendEmails} = require('./scheduled_functions')
+const {sendEmails, sendValidationEmail} = require('./scheduled_functions')
 const readline = require('readline');
 
 
@@ -59,9 +59,20 @@ app.delete("/reminders/:reminderId", deleteReminder);
 // Update settings
 app.post("/settings", updateSettings);
 
+// Validate Email
+app.post("/validate", sendValidationEmail);
+
 // Fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
+// Link to React with `/app` from docs
+app.use('/app', express.static(path.join(__dirname, '../client/dist')));
+
+// Fallback to React app `/app` from docs
+app.get('/app/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // Start the server

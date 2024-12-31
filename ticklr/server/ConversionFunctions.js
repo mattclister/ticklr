@@ -18,7 +18,6 @@ const calcReminderDate = function (newReminder) {
     return {
         ...newReminder, date: dateObject, reminder_date: newDate, recurs: `${number}${conversions[unit_time].initial}`
     }
-
 }
 
 // Return reminder date 
@@ -27,8 +26,6 @@ const returnReminderDate = function (date, number, unit_time) {
     const dateObject = dayjs(date)
     return dateObject.add(number, unit_time).toString()
 }
-
-
 
 // Combine Number and Unit Time
 
@@ -84,8 +81,7 @@ const ConvertNewReminderToReminder = function (NewReminder, fk_user_id = -1, pk_
     }
 }
 
-// // Convert Reminder Type to New Remininder Type
-
+// Convert Reminder Type to New Remininder Type
 
  const ConvertReminderToNewReminder = function (Reminder) {
 

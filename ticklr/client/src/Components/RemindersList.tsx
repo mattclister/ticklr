@@ -78,7 +78,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
               </div>
             </li>
           ))}
-          <li id="add-new-item-row" className="list-group-item">
+          <li id="add-new-item-row" className="list-group-item no-highlight">
             {" "}
             <button
               id="add-new-item-btn"
@@ -88,7 +88,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
               + add new item
             </button>
           </li>
-          {bottomBarVisible || topBarVisible?<li className="list-group-item"><div id="blank_div" style={{height: "55vh", maxHeight: "430px", minHeight: "400px"}}></div></li>: null} {/*This enssures that the list is fully scrollable when the details panel is open.*/}
+          {bottomBarVisible || topBarVisible?<li className="list-group-item no-highlight"><div id="blank_div" style={{height: "55vh", maxHeight: "430px", minHeight: "400px"}}></div></li>: null} {/*This enssures that the list is fully scrollable when the details panel is open.*/}
         </ul>   
       )}
     </>

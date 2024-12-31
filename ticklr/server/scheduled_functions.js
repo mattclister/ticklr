@@ -1,32 +1,39 @@
 const sqlite3 = require("sqlite3").verbose();
+const jwt = require("jsonwebtoken");
 const db = new sqlite3.Database("./ticklerDB.db");
-require('dotenv').config();
-const { returnReminderDate, RecursToUnit, RecursToNumber } = require('./ConversionFunctions.js');
+require("dotenv").config();
+const {
+  returnReminderDate,
+  RecursToUnit,
+  RecursToNumber,
+} = require("./ConversionFunctions.js");
 
 // Mailgun modules and constants
-const { FormData } = require('undici')
+const { FormData } = require("undici");
 const Mailgun = require("mailgun.js");
 const mailgun = new Mailgun(FormData);
 const mg = mailgun.client({
   username: "api",
   key: process.env.MAILGUN_SENDING_API_KEY,
-  url: 'https://api.eu.mailgun.net'
+  url: "https://api.eu.mailgun.net",
 });
 
-const marksent = (record,sentDate) => {
-
+const marksent = (record, sentDate) => {
   const updateQuery = `UPDATE reminders 
   SET last_sent = ?, reminder_date = ? 
-  WHERE fk_user_id = ?;`
+  WHERE pk_reminder_id = ?;`;
 
-  const unit = RecursToUnit(record.recurs)
-  const number = RecursToNumber(record.recurs)
+  const unit = RecursToUnit(record.recurs);
+  const number = RecursToNumber(record.recurs);
 
-  const newReminderDate = returnReminderDate(record.reminder_date,number,unit)
+  const newReminderDate = returnReminderDate(
+    record.reminder_date,
+    number,
+    unit
+  );
 
-  db.run(updateQuery,[sentDate,newReminderDate,record.fk_user_id])
-
-}
+  db.run(updateQuery, [sentDate, newReminderDate, record.pk_reminder_id]);
+};
 
 const sendEmails = async () => {
   // Function to get records to email from db with reminder date older than NOW
@@ -53,7 +60,7 @@ const sendEmails = async () => {
 
   // Delay function
 
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // Get records and send emails
   try {
@@ -70,13 +77,14 @@ const sendEmails = async () => {
               to: record.reminder_email,
               subject: record.title,
               text: `${record.title}
-              Sent via tickler`
+              Sent via tickler`,
             })
-            .then((msg) => {console.log(msg);
-            marksent(record,new Date().toISOString())}
-          )
+            .then((msg) => {
+              console.log(msg);
+              marksent(record, new Date().toISOString());
+            })
             .catch((err) => console.error("Mailgun error:", err.message));
-            await delay(1000)
+          await delay(1000);
         } catch (error) {
           console.error("Error sending email:", error.message);
         }
@@ -89,6 +97,60 @@ const sendEmails = async () => {
   }
 };
 
+const sendValidationEmail = async (req, res) => {
+  console.log(req.body?.email);
+  const authHeader = req.headers?.authorization;
+  console.log(`Request recieved. Token: ${authHeader}`);
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(400).json({ message: "Token is required" });
+  }
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(400).json({ message: "Token is required" });
+  }
+
+  const reminder_email = req.body?.email;
+  if (!reminder_email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  // Verify the token
+  jwt.verify(token, process.env.WEBTOKEN_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    const tokenUserId = decoded.userId;
+
+    // Update Reminder_Email
+
+    const updateReminderQuery =
+      "UPDATE users SET reminder_email = ? WHERE pk_user_id = ?";
+    db.run(updateReminderQuery, [reminder_email, tokenUserId], function (err) {
+      if (err) {
+        console.error("Failed to update reminder email:", err.message);
+        return res
+          .status(500)
+          .json({ error: "Failed to update reminder email" });
+      }
+    });
+    try {
+      await mg.messages
+        .create("ticklr.app", {
+          from: "Reminders <reminders@ticklr.app>",
+          to: reminder_email,
+          subject: "Validate your email",
+          text: "Please click here to validate your email. Link",
+        })
+        .catch((err) => console.error("Mailgun error:", err.message));
+    } catch (error) {
+      console.error("Error sending email:", error.message);
+    }
+  });
+  return res.status(200).json({ message: "Reminder email updated and validation email sent" });
+};
+
 module.exports = {
   sendEmails,
+  sendValidationEmail,
 };

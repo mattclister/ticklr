@@ -18,7 +18,6 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
     ReminderType[] | undefined
   >();
 
-
   // Use Effect on Active change
    useEffect(() => {
       if (active) {

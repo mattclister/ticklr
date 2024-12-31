@@ -224,8 +224,6 @@ async function addReminder(req, res) {
       });
     }
 
-    // Temp ID's are < 0, so this is if the request has a temp id.
-
     if (!req.body.pk_reminder_id) {
       // Add reminder to database
       const createReminderQuery = `INSERT INTO reminders (date, fk_user_id, recurs, title, reminder_date) VALUES (?, ?, ?, ?, ?)`;
@@ -361,6 +359,61 @@ async function deleteReminder(req, res) {
   })
 }
 
+
+// Verify Email
+
+async function validateEmailLink(req,res) {
+  const token = req.body.token
+  if (!token) {return res.status(401).json({ error: "Invalid Link" })}
+
+  jwt.verify(token, process.env.EMAIL_VALIDATION_KEY, async (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Invalid token" });
+      } else {
+        const tokenUserId = decoded.userId;
+        const validatedEmail = decoded.email;
+        const emailMatchQuery = `SELECT reminder_email FROM users WHERE pk_user_id = ?`;
+
+        db.get(emailMatchQuery, [tokenUserId], async (err, row) => {
+          if (err) {
+            console.error("Error fetching email from database:", err.message);
+            return res.status(500).json({ error: "Internal server error" });
+          } 
+          
+          if (!row) {
+            return res.status(404).json({ error: "User not found" });
+          } else if (validatedEmail === row.reminder_email) {
+            // Proceed with validation
+
+      try {
+        const updateValidEmailQuery = `UPDATE users SET valid_email = ? WHERE pk_user_id = ?`
+        db.run(
+          updateValidEmailQuery,
+          [validatedEmail,tokenUserId],
+          function (err) {
+            if (err) {
+              console.error("Error validating email:", err.message);
+              return res.status(500).json({ error: "Failed to validate email" });
+            }
+  
+            // Successfully added valid email to the user
+            res.status(200).json({
+              message: "Email validated successfully",
+            });
+          }
+        )
+      } catch (error) {
+        console.error("Error validating email:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
+          
+      }
+  )}
+  })}
+
+
+
 module.exports = {
   createUser,
   loginUser,
@@ -368,5 +421,6 @@ module.exports = {
   getReminders,
   addReminder,
   updateSettings,
-  deleteReminder
+  deleteReminder,
+  validateEmailLink
 };

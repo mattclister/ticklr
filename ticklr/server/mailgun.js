@@ -1,4 +1,6 @@
 const axios = require('axios');
+const jwt = require("jsonwebtoken");
+
 
 // Check an email is valid with mailgun
 
@@ -18,6 +20,3 @@ async function validateEmailMailgun(email) {
     console.error('Validation Error:', error.response?.data || error.message);
   }
 } 
-
-// Validate Email via Mailgun and Validation Code
-

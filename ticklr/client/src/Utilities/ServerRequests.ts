@@ -2,8 +2,7 @@ import { FormData } from "../Components/UserRegisterForm";
 import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import { NewReminderType } from "../Components/ItemDetails";
-import { calcReminderDate } from "../Utilities/helperFunctions";
-
+import { convertRecurs } from "./helperFunctions";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -83,7 +82,7 @@ export const getReminders = async () => {
 // Add Reminder
 
 export const addReminder = async (newReminder: NewReminderType) => {
-  const postableReminder = calcReminderDate(newReminder);
+  let postableReminder = convertRecurs(newReminder)
   let token = localStorage.getItem("webToken");
 
   try {
@@ -121,12 +120,13 @@ export const deleteReminder = async (activeID: number | undefined) => {
 
 // Update Settings
 
-export const postReminderEmail = async (reminderEmail: string | undefined) => {
+export const updateSettings = async (reminderEmail: string | undefined) => {
   let token = localStorage.getItem("webToken");
+  console.log("Validating Email")
+  console.log(reminderEmail)
 
   apiClient.post(
-    "/settings",
-    {data: {email: reminderEmail}},
+    "/validate",{email: reminderEmail},
     {
       headers: { Authorization: `Bearer ${token}` },
     }
@@ -137,3 +137,21 @@ export const postReminderEmail = async (reminderEmail: string | undefined) => {
       console.error("Error updating settings", error);
     });
 };
+
+// Get Settings
+
+export const getSettings = async () => {
+  let token = localStorage.getItem("webToken")
+  apiClient.get(
+    "/settings",
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  ).then((response) => {
+      console.log("Settings recieved", response.data);
+    })
+    .catch((error) => {
+      console.error("Error getting settings", error);
+    });
+}
+

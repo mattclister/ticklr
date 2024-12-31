@@ -236,7 +236,7 @@ export const ItemDetails = ({
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
           <div className="col-5 ms-0">
             <label className="form-label" htmlFor="Date">
-              Date
+              Start date
             </label>
             <Controller
               control={control}
@@ -268,7 +268,7 @@ export const ItemDetails = ({
             )}
           </div>
           <div className="col-3">
-            <label className="form-label">Recurs</label>
+            <label className="form-label">Recurs every</label>
             <input
               {...register("number")}
               id="Number"
@@ -284,7 +284,7 @@ export const ItemDetails = ({
             )}
           </div>
           <div className="col-4 me-0">
-            <label className="form-label">Every</label>
+            <label className="form-label" htmlFor="unit_time">Frequency</label>
             <select
               {...register("unit_time")}
               id="unit_time"

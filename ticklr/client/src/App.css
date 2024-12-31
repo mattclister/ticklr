@@ -70,11 +70,6 @@ h2 {
   color: #fffaec
 }
 
-
-.form-control {
-  width: 100% !important;
-}
-
 .react-datepicker-wrapper {
   width: 100%
 }
@@ -120,7 +115,7 @@ h2 {
   color: #fffaec;
 }
 
-#add-new-item-row:hover {
+.no-highlight:hover {
   background-color: #ffff;
 }
 
@@ -206,6 +201,28 @@ h2 {
   overflow-y: auto;
   height: auto;
   color: #ebedf0;
+}
+
+.email-reminder-group {
+  display: flex;
+}
+
+.email-reminder-group input,
+.email-reminder-group button {
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.email-reminder-input {
+  border-top-right-radius: 0; 
+  border-bottom-right-radius: 0;
+}
+
+.email-reminder-btn {
+  width: 20%;
+  border-top-left-radius: 0; 
+  border-bottom-left-radius: 0;
 }
 
 /* Login Page */
@@ -327,3 +344,4 @@ cursor: pointer;
 .btn-outline-warning {
   color: #ffff;
 }
+

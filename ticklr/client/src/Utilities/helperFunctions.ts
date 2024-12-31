@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 
 // Calculate Reminder Date from start date and recurance. 
 
-export const calcReminderDate = function (newReminder: NewReminderType) {
+export const convertRecurs = function (newReminder: NewReminderType) {
     const conversions = {
         week: { initial: "w" },
         day: { initial: "d" },
@@ -15,10 +15,9 @@ export const calcReminderDate = function (newReminder: NewReminderType) {
     const { date, number, unit_time } = newReminder
 
     const dateObject = dayjs(date)
-    const newDate = dateObject.add(number, unit_time);
 
     return {
-        ...newReminder, date: dateObject, reminder_date: newDate, recurs: `${number}${conversions[unit_time].initial}`
+        ...newReminder, date: dateObject, reminder_date: dateObject, recurs: `${number}${conversions[unit_time].initial}`
     }
 
 }
@@ -29,8 +28,6 @@ export const returnReminderDate = function (date: string, number: number, unit_t
     const dateObject = dayjs(date)
     return dateObject.add(number, unit_time).toString()
 }
-
-
 
 // Combine Number and Unit Time
 
@@ -85,7 +82,7 @@ export const ConvertNewReminderToReminder = function (NewReminder: NewReminderTy
         pk_reminder_id: pk_reminder_id,
         title: NewReminder.reminder,
         recurs: UnitAndNumberToRecurs(NewReminder.number, NewReminder.unit_time),
-        reminder_date: returnReminderDate(NewReminder.date, NewReminder.number, NewReminder.unit_time)
+        reminder_date: NewReminder.date
     }
 }
 
