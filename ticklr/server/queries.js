@@ -363,12 +363,13 @@ async function deleteReminder(req, res) {
 // Verify Email
 
 async function validateEmailLink(req,res) {
-  const token = req.body.token
-  if (!token) {return res.status(401).json({ error: "Invalid Link" })}
+  const { validationCode: token } = req?.params;
+  console.log(token)
+  if (!token) {return res.redirect("http://localhost:3000/docs/validate_failure/")}
 
   jwt.verify(token, process.env.EMAIL_VALIDATION_KEY, async (err, decoded) => {
       if (err) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.redirect("http://localhost:3000/docs/validate_failure/");
       } else {
         const tokenUserId = decoded.userId;
         const validatedEmail = decoded.email;
@@ -377,11 +378,11 @@ async function validateEmailLink(req,res) {
         db.get(emailMatchQuery, [tokenUserId], async (err, row) => {
           if (err) {
             console.error("Error fetching email from database:", err.message);
-            return res.status(500).json({ error: "Internal server error" });
+            return res.redirect("http://localhost:3000/docs/validate_failure/");
           } 
           
           if (!row) {
-            return res.status(404).json({ error: "User not found" });
+            return res.redirect("http://localhost:3000/docs/validate_failure/");
           } else if (validatedEmail === row.reminder_email) {
             // Proceed with validation
 
@@ -393,18 +394,16 @@ async function validateEmailLink(req,res) {
           function (err) {
             if (err) {
               console.error("Error validating email:", err.message);
-              return res.status(500).json({ error: "Failed to validate email" });
+              return res.redirect("http://localhost:3000/docs/validate_failure/");
             }
-  
-            // Successfully added valid email to the user
-            res.status(200).json({
-              message: "Email validated successfully",
-            });
+
+          // Redirect user to the desired URL
+            return res.redirect("http://localhost:3000/docs/validate_success/");
           }
         )
       } catch (error) {
         console.error("Error validating email:", error.message);
-        res.status(500).json({ error: "Internal server error" });
+        return res.redirect("http://localhost:3000/docs/validate_failure/");
       }
     }
           

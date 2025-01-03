@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const bcrypt = require('bcrypt');
-const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings, deleteReminder} = require('./queries')
+const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings, deleteReminder, validateEmailLink} = require('./queries')
 const cron = require('node-cron');
 const {sendEmails, sendValidationEmail} = require('./scheduled_functions')
 const readline = require('readline');
@@ -59,8 +59,11 @@ app.delete("/reminders/:reminderId", deleteReminder);
 // Update settings
 app.post("/settings", updateSettings);
 
-// Validate Email
+// Set Validated Email
 app.post("/validate", sendValidationEmail);
+
+// Process a validation link
+app.get("/validate/:validationCode", validateEmailLink);
 
 // Fallback
 app.get('*', (req, res) => {

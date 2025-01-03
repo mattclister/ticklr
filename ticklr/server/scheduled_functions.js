@@ -134,13 +134,20 @@ const sendValidationEmail = async (req, res) => {
           .json({ error: "Failed to update reminder email" });
       }
     });
+
+    // Generate Validation Link
+
+    const validationCode = jwt.sign({ userId: tokenUserId, email: reminder_email}, process.env.EMAIL_VALIDATION_KEY, {
+          expiresIn: "10m",
+        });
+    
     try {
       await mg.messages
         .create("ticklr.app", {
           from: "Reminders <reminders@ticklr.app>",
           to: reminder_email,
           subject: "Validate your email",
-          text: "Please click here to validate your email. Link",
+          text: `Please click here to validate your email. Link: http://localhost:3000/validate/${validationCode}`,
         })
         .catch((err) => console.error("Mailgun error:", err.message));
     } catch (error) {
