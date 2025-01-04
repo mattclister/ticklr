@@ -1,0 +1,22 @@
+{
+  "id": "intro",
+  "title": "Introduction",
+  "description": "Welcome to the documentation for My Custom Project. Here you’ll find all the information you need to get started.",
+  "source": "@site/docs/intro.md",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/docs/docs/intro",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Hi!",
+    "permalink": "/docs/docs/docs/hello"
+  }
+}

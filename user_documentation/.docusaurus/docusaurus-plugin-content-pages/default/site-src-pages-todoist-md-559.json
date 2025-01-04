@@ -1,0 +1,8 @@
+{
+  "type": "mdx",
+  "permalink": "/docs/todoist",
+  "source": "@site/src/pages/todoist.md",
+  "description": "Todoist",
+  "frontMatter": {},
+  "unlisted": false
+}

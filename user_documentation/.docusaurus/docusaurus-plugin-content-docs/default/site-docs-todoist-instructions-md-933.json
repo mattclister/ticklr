@@ -1,0 +1,19 @@
+{
+  "id": "todoist/Instructions",
+  "title": "Instructions",
+  "description": "",
+  "source": "@site/docs/todoist/Instructions.md",
+  "sourceDirName": "todoist",
+  "slug": "/todoist/Instructions",
+  "permalink": "/docs/docs/todoist/Instructions",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "todoist",
+  "next": {
+    "title": "Introduction",
+    "permalink": "/docs/docs/todoist/Introduction"
+  }
+}

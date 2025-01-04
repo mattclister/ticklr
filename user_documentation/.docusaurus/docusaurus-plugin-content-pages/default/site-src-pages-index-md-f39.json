@@ -1,0 +1,11 @@
+{
+  "type": "mdx",
+  "permalink": "/docs/",
+  "source": "@site/src/pages/index.md",
+  "title": "HOMEPAGE",
+  "description": "Welcome to the documentation for My Custom Project. Here you’ll find all the information you need to get started.",
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "unlisted": false
+}

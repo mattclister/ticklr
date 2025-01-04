@@ -1,0 +1,57 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/docs",
+          "mainDocId": "todoist/Instructions",
+          "docs": [
+            {
+              "id": "hello",
+              "path": "/docs/docs/hello"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/docs/intro"
+            },
+            {
+              "id": "todoist/Instructions",
+              "path": "/docs/docs/todoist/Instructions",
+              "sidebar": "todoist"
+            },
+            {
+              "id": "todoist/Introduction",
+              "path": "/docs/docs/todoist/Introduction",
+              "sidebar": "todoist"
+            },
+            {
+              "id": "wonderlist/Wonderlist",
+              "path": "/docs/docs/wonderlist/",
+              "sidebar": "wonderlist"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "todoist": {
+              "link": {
+                "path": "/docs/docs/todoist/Instructions",
+                "label": "todoist/Instructions"
+              }
+            },
+            "wonderlist": {
+              "link": {
+                "path": "/docs/docs/wonderlist/",
+                "label": "wonderlist/Wonderlist"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

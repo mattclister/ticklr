@@ -1,0 +1,23 @@
+{
+  "id": "docs/hello",
+  "title": "Hello",
+  "description": "This is my first Docusaurus document!",
+  "source": "@site/docs/docs/hello.md",
+  "sourceDirName": "docs",
+  "slug": "/docs/hello",
+  "permalink": "/docs/docs/docs/hello",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_label": "Hi!",
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/docs/docs/intro"
+  }
+}
