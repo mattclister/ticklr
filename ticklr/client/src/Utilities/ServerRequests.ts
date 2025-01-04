@@ -3,6 +3,7 @@ import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import { NewReminderType } from "../Components/ItemDetails";
 import { convertRecurs } from "./helperFunctions";
+import {settingsType} from "../Components/Settings";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -140,18 +141,20 @@ export const updateSettings = async (reminderEmail: string | undefined) => {
 
 // Get Settings
 
-export const getSettings = async () => {
-  let token = localStorage.getItem("webToken")
-  apiClient.get(
-    "/settings",
-    {
+export const getSettings = async (): Promise<settingsType | undefined> => {
+  let token = localStorage.getItem("webToken");
+
+  try {
+    const response = await apiClient.get("/settings", {
       headers: { Authorization: `Bearer ${token}` },
-    }
-  ).then((response) => {
-      console.log("Settings recieved", response.data);
-    })
-    .catch((error) => {
-      console.error("Error getting settings", error);
     });
-}
+
+    console.log("Settings received", response.data);
+    return response.data.settings as settingsType; 
+  } catch (error) {
+    console.error("Error getting settings", error);
+    return undefined;
+  }
+};
+
 

@@ -345,3 +345,15 @@ cursor: pointer;
   color: #ffff;
 }
 
+.btn-outline-danger {
+  color: #ffff;
+}
+
+.btn-outline-warning:hover {
+  color: #ffff;
+}
+
+.btn-outline-danger:hover {
+  color: #ffff;
+}
+

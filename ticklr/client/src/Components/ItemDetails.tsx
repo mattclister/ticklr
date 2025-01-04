@@ -268,7 +268,7 @@ export const ItemDetails = ({
             )}
           </div>
           <div className="col-3">
-            <label className="form-label">Recurs every</label>
+            <label className="form-label">Recurs</label>
             <input
               {...register("number")}
               id="Number"

@@ -411,7 +411,63 @@ async function validateEmailLink(req,res) {
   )}
   })}
 
+  async function getSettingsFromDatabase(userId) {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT valid_email FROM users WHERE pk_user_id = ?`;
+      db.get(query, [userId], (err, row) => {
+        if (err) {
+          console.error("Error querying settings:", err.message);
+          reject("Error querying settings");
+        } else {
+          if (!row) {
+            resolve({ email: null });
+          } else {
+            const settings = { email: row.valid_email };
+            resolve(settings);
+          }
+        }
+      });
+    });
+  }  
 
+  async function getSettings(req, res) {
+    const authHeader = req.headers.authorization;
+    console.log(`Request received. Token: ${authHeader}`);
+  
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+  
+    const token = authHeader.split(" ")[1];
+  
+    if (!token) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+  
+    // Verify the token
+    jwt.verify(token, web_token_key, async (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+        const tokenUserId = decoded.userId;
+      console.log(`Getting settings, the decoded userId is: ${tokenUserId}`);
+  
+      try {
+        const settings = await getSettingsFromDatabase(tokenUserId);
+        console.log(settings)
+        
+        if (settings.email) {
+          res.status(200).json({ message: "Settings retrieved successfully", settings });
+        } else {
+          res.status(404).json({ message: "No settings found for this user" });
+        }
+        
+      } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ message: "Error retrieving settings" });
+      }
+    });
+  }
 
 module.exports = {
   createUser,
@@ -421,5 +477,6 @@ module.exports = {
   addReminder,
   updateSettings,
   deleteReminder,
-  validateEmailLink
+  validateEmailLink,
+  getSettings
 };

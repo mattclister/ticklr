@@ -134,8 +134,8 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
               left: 0,
               width: "100%",
               maxWidth: "1000px",
-              maxHeight: "430px",
-              minHeight: "400px",
+              maxHeight: "270px",
+              minHeight: "270px",
             }}
           >
             <Settings
