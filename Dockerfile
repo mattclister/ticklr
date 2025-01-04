@@ -1,3 +1,3 @@
 FROM node:alpine
 COPY . /app
-CMD node /server/server.js
+CMD npm run start:server

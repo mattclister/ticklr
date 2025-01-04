@@ -1,9 +1,27 @@
 {
-  "devDependencies": {
-    "typescript": "^5.6.2"
-  },
-  "dependencies": {
-    "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.3"
+    "name": "ticklr",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "workspaces": [
+      "client",
+      "server",
+      "user_documentation"
+    ],
+    "scripts": {
+      "install-all": "npm install",     
+      "start": "npm run start:client & npm run start:server",
+      "start:client": "npm --workspace=client run dev",
+      "start:server": "npm --workspace=server run start",
+      "build": "npm run build:client && npm run build:docs",
+      "build:client": "npm --workspace=client run build",
+      "build:docs": "npm --workspace=docs run build",
+      "test": "npm --workspaces run test",
+      "lint": "npm --workspace=client run lint"
+    },
+    "devDependencies": {},
+    "engines": {
+      "node": ">=18.0.0"
+    }
   }
-}
+  
