@@ -5,7 +5,6 @@ COPY client/package*.json ./
 RUN npm install
 COPY client/ ./
 RUN npm run build
-RUN ls -al /ticklr/client/dist 
 
 # Stage 2: Copy the user documentation build
 FROM node:18-alpine AS docs-build
@@ -14,7 +13,6 @@ COPY user_documentation/package*.json ./
 RUN npm install
 COPY user_documentation/ ./
 RUN npm run build
-RUN ls -al /ticklr/user_documentation/build
 
 # Stage 3: Set up the Node.js backend with SQLite3
 FROM node:18-alpine AS server
@@ -32,7 +30,6 @@ COPY server/ ./
 
 # Rebuild sqlite3 package to ensure compatibility with the environment
 RUN npm rebuild sqlite3 --unsafe-perm
-RUN ls -al /ticklr/server
 
 # Stage 4: Final runtime image
 FROM node:18-alpine
