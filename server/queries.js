@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
@@ -34,7 +34,7 @@ async function createUser(req, res) {
 
     // Email is not registered:
     try {
-      const passwordHash = await bcrypt.hash(createPassword, 10);
+      const passwordHash = await bcryptjs.hash(createPassword, 10);
       const createUserQuery = `INSERT INTO users (user_email, user_password, user_timezone) VALUES (?, ?, ?)`;
 
       db.run(
@@ -77,7 +77,7 @@ async function loginUser(req, res) {
     }
 
     // Compare the hashed password stored in the database with the provided password
-    const isPasswordMatch = await bcrypt.compare(
+    const isPasswordMatch = await bcryptjs.compare(
       user_Password,
       user.user_password
     );

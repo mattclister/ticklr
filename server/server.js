@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const path = require('path');
-const bcrypt = require('bcrypt');
 const {createUser, loginUser, validateToken, getReminders, addReminder, updateSettings, deleteReminder, validateEmailLink, getSettings} = require('./queries')
 const cron = require('node-cron');
 const {sendEmails, sendValidationEmail} = require('./scheduled_functions')

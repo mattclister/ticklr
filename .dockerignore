@@ -1,0 +1,25 @@
+
+**/node_modules
+*.log
+.DS_Store
+
+# Environment files
+*.env
+
+# Dev Build outputs
+**/dist
+**/build
+**/.docusaurus
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# VScode Settings
+.vscode
+.idea
+*.swp
+
+# Docker
+*.dockerignore
