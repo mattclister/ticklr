@@ -5,12 +5,13 @@ require('dotenv').config();
 
 const web_token_key = process.env.WEBTOKEN_KEY
 
+const dbLocation = process.env.DB_LOCATION ? path.join(__dirname, process.env.DB_LOCATION) : path.join(__dirname, 'ticklerDB.db');
 
-const db = new sqlite3.Database(process.env.DB_LOCATION, (err) => {
+const db = new sqlite3.Database(dbLocation, (err) => {
   if (err) {
     console.error("Failed to connect to the database:", err.message);
   } else {
-    console.log(`Connected to the SQLite database at: ${process.env.DB_LOCATION}`);
+    console.log(`Connected to the SQLite database at: ${dbLocation}`);
   }
 });
 
