@@ -6,7 +6,7 @@ import { convertRecurs } from "./helperFunctions";
 import {settingsType} from "../Components/Settings";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: process.env.BASE_URL,
 });
 
 // Create User
