@@ -1,6 +1,5 @@
 const dayjs = require ("./node_modules/dayjs")
 
-
 // Calculate Reminder Date from start date and recurance. 
 
 const calcReminderDate = function (newReminder) {
