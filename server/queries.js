@@ -1,15 +1,17 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require('path');
 require('dotenv').config();
 
 const web_token_key = process.env.WEBTOKEN_KEY
 
 const dbLocation = process.env.DB_LOCATION ? path.join(__dirname, process.env.DB_LOCATION) : path.join(__dirname, 'ticklerDB.db');
+console.log()
 
 const db = new sqlite3.Database(dbLocation, (err) => {
   if (err) {
-    console.error("Failed to connect to the database:", err.message);
+    console.error(`Failed to connect to the database at: ${dbLocation}`, err.message);
   } else {
     console.log(`Connected to the SQLite database at: ${dbLocation}`);
   }
