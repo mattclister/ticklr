@@ -1,9 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const jwt = require("jsonwebtoken");
-const path = require("path")
-const dbLocation = process.env.DB_LOCATION ? path.join(__dirname, process.env.DB_LOCATION) : path.join(__dirname, 'ticklerDB.db');
-const db = new sqlite3.Database(dbLocation);
-
+const db = new sqlite3.Database("./ticklerDB.db");
 require("dotenv").config();
 const {
   returnReminderDate,

@@ -1,7 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const path = require("path")
 require('dotenv').config();
 
 const web_token_key = process.env.WEBTOKEN_KEY
