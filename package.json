@@ -1,27 +1,26 @@
 {
-    "name": "ticklr",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "workspaces": [
-      "client",
-      "server",
-      "user_documentation"
-    ],
-    "scripts": {
-      "install-all": "npm install",     
-      "start": "npm run start:client & npm run start:server",
-      "start:client": "npm --workspace=client run dev",
-      "start:server": "npm --workspace=server run start",
-      "build": "npm run build:client && npm run build:docs",
-      "build:client": "npm --workspace=client run build",
-      "build:docs": "npm --workspace=docs run build",
-      "test": "npm --workspaces run test",
-      "lint": "npm --workspace=client run lint"
-    },
-    "devDependencies": {},
-    "engines": {
-      "node": ">=18.0.0"
-    }
+  "name": "ticklr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "author": "Matt Lister",
+
+  "scripts": {
+    "install-all": "npm run install:client && npm run install:server && npm run install:docs",
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:docs": "cd user_documentation && npm install",
+    "start": "npm run start:client & npm run start:server",
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && npm start",
+    "build": "npm run build:client && npm run build:docs",
+    "build:client": "cd client && npm run build",
+    "build:docs": "cd user_documentation && npm run build",
+    "test": "cd client && npm test && cd ../server && npm test",
+    "lint": "cd client && npm run lint"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
   }
-  
+}
