@@ -21,7 +21,7 @@ RUN apk update && apk add --no-cache \
     python3 \
     make \
     g++ && \
-    sqlite \
+    sqlite && \
     rm -rf /var/lib/apk/lists/*
 
 # Copy package files
