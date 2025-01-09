@@ -36,6 +36,10 @@ RUN npm rebuild sqlite3 --unsafe-perm
 FROM node:18-alpine
 
 WORKDIR /ticklr
+
+# Installations for the final runtime image
+RUN apk update && apk add --no-cache sqlite && rm -rf /var/lib/apk/lists/*
+
 COPY --from=client-build /ticklr/client/dist ./client/dist
 COPY --from=docs-build /ticklr/user_documentation/build ./user_documentation/build
 COPY --from=server /ticklr/server ./server
