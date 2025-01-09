@@ -21,6 +21,7 @@ RUN apk update && apk add --no-cache \
     python3 \
     make \
     g++ && \
+    sqlite \
     rm -rf /var/lib/apk/lists/*
 
 # Copy package files
@@ -30,6 +31,8 @@ COPY server/ ./
 
 # Rebuild sqlite3 package to ensure compatibility with the environment
 RUN npm rebuild sqlite3 --unsafe-perm
+
+# Install sqlite 
 
 # Stage 4: Final runtime image
 FROM node:18-alpine
