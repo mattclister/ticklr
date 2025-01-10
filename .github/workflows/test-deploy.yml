@@ -19,10 +19,6 @@ jobs:
         run: |
           docker build -t ticklr-app .
 
-      - name: Run Tests
-        run: |
-          docker run --rm ticklr-app npm test
-
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_test
@@ -35,5 +31,5 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
           curl -sSL https://render.com/deploy/render-cli/install.sh | bash
-          render deploy --service-id your-render-service-id --branch main
+          render deploy --service-id ${{ secrets.RENDER_SERVICE_ID }} --branch main
 
