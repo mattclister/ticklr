@@ -26,10 +26,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy to Render
+      - name: Install Render CLI
+        run: |
+          curl -sSL https://render.com/deploy/render-cli/install.sh | bash
+
+      - name: Authenticate with Render
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
-          curl -sSL https://render.com/deploy/render-cli/install.sh | bash
-          render deploy --service-id ${{ secrets.RENDER_SERVICE_ID }} --branch main
+          export RENDER_API_KEY=${{ secrets.RENDER_API_KEY }}
+          render login --api-key $RENDER_API_KEY
+
+      - name: Deploy to Render
+        env:
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          render deploy --service-id $RENDER_SERVICE_ID --branch main
 
