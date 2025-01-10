@@ -10,7 +10,7 @@
     "install:client": "cd client && npm install",
     "install:server": "cd server && npm install",
     "install:docs": "cd user_documentation && npm install",
-    "start": "npm run start:client & npm run start:server",
+    "start": "npm run start:server",
     "start:client": "cd client && npm run dev",
     "start:server": "cd server && npm start",
     "build": "npm run build:client && npm run build:docs",

@@ -3,7 +3,6 @@ import { getReminders } from "../Utilities/ServerRequests";
 import { ReminderType } from "../Utilities/types";
 import dayjs from 'dayjs';
 import React from "react";
-import { color } from "framer-motion";
 
 interface Props {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +29,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
         setReminderData(requestedData);
         setLoading(false);
         console.log(requestedData)
-        console.log(requestedData[0])
+        console.log(reminderdata)
       } catch (error) {
         console.error("Error fetching reminders:", error);
         setLoading(false);
@@ -45,7 +44,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
     setBottomBarVisible(true)
   }
 
-  if(loading){return <p>"loading..."</p>} else {
+  if(loading){return <p>loading...</p>} else {
 
   return (
     <>

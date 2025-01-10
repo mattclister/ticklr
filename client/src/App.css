@@ -112,9 +112,13 @@ h2 {
 
 .list-group-item.selected:hover {
   background-color: #f8bd3b;
-  /* Same as active color */
   border-color: #f8bd3b;
   color: #fffaec;
+}
+
+.list-group-item.selected {
+  background-color: #f8bd3b;
+  border-color: #f8bd3b;
 }
 
 .no-highlight:hover {
