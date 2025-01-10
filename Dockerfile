@@ -6,6 +6,13 @@ RUN npm install
 COPY client/ ./
 RUN npm run build
 
+# Stage 1.1: Run tests on the React frontend
+FROM node:18-alpine AS client-test
+WORKDIR /ticklr/client
+COPY --from=client-build /ticklr/client ./
+RUN npm install
+RUN npm test
+
 # Stage 2: Copy the user documentation build
 FROM node:18-alpine AS docs-build
 WORKDIR /ticklr/user_documentation
