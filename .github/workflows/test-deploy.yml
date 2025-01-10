@@ -1,0 +1,40 @@
+name: Test and Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies and run tests
+      - name: Install dependencies and run tests
+        run: |
+          npm ci --prefix client
+          npm ci --prefix user_documentation
+          npm ci --prefix server
+          npm run test --prefix client -- --run
+          npm run test --prefix user_documentation -- --run
+          npm run test --prefix server -- --run
+
+      # Step 4: Deploy to Render if tests pass
+      - name: Deploy to Render
+        if: success()
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId": ${{secrets.RENDER_SERVICE_ID}}, "branch": "main"}' \
+          https://api.render.com/deploy
