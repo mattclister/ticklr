@@ -1,6 +1,7 @@
 const axios = require('axios');
 const jwt = require("jsonwebtoken");
 
+// This is currently not being used
 
 // Check an email is valid with mailgun
 
