@@ -1,0 +1,11 @@
+Places to fix dataformat:
+- Client:
+    - ItemDetails
+    - RemindersList
+    - RemindersPage
+    - Helperfunctions
+    - Server Requests
+    - types
+- Server:
+    - Conversion Functions
+    - Queries
