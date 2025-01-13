@@ -18,32 +18,32 @@ Technically Ticklr is a single page **React** app, built with vite that also has
 Here is a quick tour of the key files:
 
 ### Login and Signup
-- *client/src/Components/UserLoginForm.tsx*
-- *client/src/Components/UserRegisterForm.tsx*
+- *[client/src/Components/UserLoginForm.tsx](/client/src/Components/UserLoginForm.tsx)*
+- *[client/src/Components/UserRegisterForm.tsx](/client/src/Components/UserRegisterForm.tsx)*
 
 Login and Signup forms both utilise the React Hook Form library and Zod for real time validation. When a user successfully logs in they are issued with a JSON Web Token via BcryptJS which is valid for an hour and currently stored in the browser’s local storage. This level of security was okay for development but my intention is to store the token in an HTTP-only secure cookie to prevent client-side JavaScript from accessing the token in future.
 
 ### Reminders Page
-*client/src/Components/RemindersPage.tsx*
+*[client/src/Components/RemindersPage.tsx](/client/src/Components/RemindersPage.tsx)*
 
 The Reminders Page serves as my main parent component and holds any states required by multiple components. It passes down states and setState functions. It also nests my Item Details drawer in an animation component, which is animated with the Framer Motion library. I did spend some time trying to animate this with pure CSS but never got it to work. I left with the suspicion that the issue was the timing of component renders and after quickly learning the basics of Framer Motion, I made the decision to move on.
 
 ### Reminders List
-*client/src/Components/RemindersList.tsx*
+*[client/src/Components/RemindersList.tsx](/client/src/Components/RemindersList.tsx)*
 
 Reminders List loads items from the server and renders them. I use a UseEffect and a loading screen to hold the app while the server responds, while ensuring we avoid an infinite loop of sever requests on every render. Currently items are sorted by date before mapping but I intend to add a search bar and add a .filter here too.
 
 ### Item Details
-*client/src/Components/ItemDetails.tsx*
+*[client/src/Components/ItemDetails.tsx](/client/src/Components/ItemDetails.tsx)*
 
 The item details component conditionally renders either the “add new item” or “update item” interface depending on if an active item is selected. I thought this was a good application of DRY principals as they both share the same zod validation and server request pathways. However, it later transpired that this makes the animation difficult and you may notice there is no animation going from the update view to the add new view. I will need to either split these into 2 separate components or experiment with animating out and back in the same component, with an updated render in between.
 
 Despite this I am particularly pleased about my “optimistic updates” which make the app feel really fast. By updating the GUI before the server requests are completed the app feels faster than your internet 99% of the time. The GUI then reverts if the server request fails, which hopefully isn’t too often, hence optimistic.
 
 ### Server
-*server/server.js*
-*server/scheduled_functions.js*
-*server/queries.js*
+*[server/server.js](/server/server.js)*
+*[server/scheduled_functions.js](/server/scheduled_functions.js)*
+*[server/queries.js](/server/queries.js)*
 
 My server.js entry point shows my routing and also the single custom console command I have which uses readline to allows me to manually trigger events from my server’s shell. Server.js also uses node-cron to schedule my hourly sending of reminder emails.
 
@@ -54,7 +54,7 @@ It also contains my email validation system. When a user registers a new reminde
 Queries.js contains most of my SQL queries, which use the parameterised query method to prevent SQL injection. It also hashes my passwords for storage and validation.
 
 ### Testing
-*client/tests/components/ReminderList.test.tsx*
+*[client/tests/components/ReminderList.test.tsx](/client/tests/components/ReminderList.test.tsx)*
 
 Ticklr is set up to be continuously integrated. Updates to the main branch are tested via git actions and code deploys automatically to render if tests succeed. Currently I only have a small number of tests and have had to learn more about testing react apps.
 I am using vitest with JSDOM over Jest as ViTest supports ECMAScript and JSX. I did consider running the tests within my docker build, but running the tests on GitHub before building on render saves render pipeline costs in only pushing working versions to render.
