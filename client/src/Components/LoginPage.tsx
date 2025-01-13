@@ -15,7 +15,7 @@ export const LoginPage = ({ handleSetLogIn }: LoginProps) => {
     <div id="loginPage">
       <img src={logo} id="logo-md" alt="Logo" />
       {showSignUp ? (
-        <UserRegisterForm />
+        <UserRegisterForm setshowSignUp={setshowSignUp} />
       ) : (
         <UserLoginForm handleSetLogIn={handleSetLogIn} />
       )}

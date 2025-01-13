@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 // Create User
 
-export const CreateUser = async (data: FormData) => {
+export const CreateUser = async (data: FormData, setshowSignUp: React.Dispatch<React.SetStateAction<boolean>>) => {
   const formDataPacket = {
     ...data,
     confirmPassword: undefined,
@@ -23,6 +23,7 @@ export const CreateUser = async (data: FormData) => {
     .post("/users", formDataPacket)
     .then((response) => {
       console.log("Data submitted successfully", response.data);
+      setshowSignUp(false)
     })
     .catch((error) => {
       console.error("Error submitting data", error);

@@ -20,19 +20,28 @@ const schema = z.object({
 // Using the above schema to create a type for the FormData
 export type FormData = z.infer<typeof schema>;
 
-export const UserRegisterForm = () => {
+interface UserRegisterFormProps {
+  setshowSignUp: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+
+export const UserRegisterForm = ({setshowSignUp}:UserRegisterFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange", reValidateMode: "onChange"  });
 
+  const onSubmit = (data: FormData) => {
+    CreateUser(data, setshowSignUp);
+  };
+
   return (
     <>
       <h2>Register</h2>
       <form
         id="registrationForm"
-        onSubmit={handleSubmit(CreateUser)}
+        onSubmit={handleSubmit(onSubmit)}
       >
         {/* Enter Email */}
 
