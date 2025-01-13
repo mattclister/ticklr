@@ -4,6 +4,7 @@ Thank you for visiting Ticklr. This project readme is written for prospective em
 
 The latest deployment is available to view here: https://ticklr.onrender.com/  
 Feel free to sign up or else use: ( demo@email.com : abc123!! ).
+If creating your own account you need to verify your reminder email in settings.
 
 I can be contacted at *matt.c.lister (at) gmail.com*
 
