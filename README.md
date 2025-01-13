@@ -2,16 +2,18 @@
 
 Thank you for visiting Ticklr. This project readme is written for prospective employers and gives a high-level guide to Ticklr’s implementation and my decision making.
 
-The latest deployment is available here: https://ticklr.onrender.com/  
-Feel free to sign up, else use: ( demo@email.com : abc123!! ).
+The latest deployment is available to view here: https://ticklr.onrender.com/  
+Feel free to sign up or else use: ( demo@email.com : abc123!! ).
 
 I can be contacted at *matt.c.lister (at) gmail.com*
 
+#### Technologies Used: REACT, TypeScript, JavaScript, HTML, JSX, CSS, SASS, SQL, DOCKER, EXPRESS, AXIOS, SQLite, Vite, ViTest
+
 ### What is Ticklr?
 
-A “Tickler” or “Ticker File” is an system first introduced to me by David Allen in his excellent book “Getting things done”. Being the 80s, it was a physical drawer with a folder for each day of the month. By placing reminders, needed documents and items like gig tickets into the appropriate drawer, you could mail things to yourself in the future. Todo apps fulfil some of these functions but not quite as he or I imagine, so I set to make a clearer and simpler way. Ticklr then is a place to put anything you need on a given date, partway between a todo app and a calendar. On that date, your items can be emailed to you or sent directly to your todo app or sent to Zapier, where you might trigger almost anything on the internet. As such it serves as a digital event scheduler, that I hope will allow users to schedule anything from one place.
+A “Tickler” or “Ticker File” is an system first introduced to me by David Allen in his excellent book “Getting things done”. Being the 80s, it was a physical drawer with a folder for each day of the month. By placing reminders, needed documents and items like gig tickets into the appropriate drawer, you could mail things to yourself in the future. Todo apps fulfil some of these functions but not quite as he or I imagine, so I decided to make a simpler way. Ticklr then is a place to put anything you need on a given date, partway between a todo app and a calendar. On that date, your items can be emailed to you or sent directly to your todo app or sent to Zapier, where you might trigger almost anything on the internet. As such it serves as a digital event scheduler, that I hope will allow users to schedule anything from one place.
 
-Technically Ticklr is a single page React app, built with vite that also has a subdomain static HTML site for user documentation. Ticklr’s client is written in Typescript and JSX and uses axios for requests. It uses a Node server written in Javascript and uses Express to serve the app and the static site. Data is stored in a SQL database managed with SQLite. My styling is built on Bootstrap with some custom CSS and SASS. The sever uses Mailgun to deliver emails via the maligun api. My control system is Git and the app is built into a Docker image for deployment by continuous integration to render.com.
+Technically Ticklr is a single page **React** app, built with vite that also has a subdomain static **HTML** site for user guides. Ticklr’s client is written in **Typescript** and **JSX** and uses **axios** for requests. It uses a **Node** server written in Javascript and uses **Express** to serve the app and the static site. Data is stored in a **SQL** database managed with **SQLite**. My styling is built on **Bootstrap** with some custom **CSS** and **SASS**. The sever connects to Mailgun to deliver emails via the maligun api. My control system is Git and the app is built into a **Docker** image for deployment by continuous integration to render.com.
 
 Here is a quick tour of the key files:
 
