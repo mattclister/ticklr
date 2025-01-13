@@ -2,7 +2,8 @@
 
 Thank you for visiting Ticklr. This project readme is written for prospective employers and gives a high-level guide to Ticklr’s implementation and my decision making.
 
-The latest deployment is available here: https://ticklr.onrender.com/  Feel free to sign up, else use: ( demo@email.com : abc123!! ).
+The latest deployment is available here: https://ticklr.onrender.com/  
+Feel free to sign up, else use: ( demo@email.com : abc123!! ).
 
 I can be contacted at *matt.c.lister (at) gmail.com*
 
