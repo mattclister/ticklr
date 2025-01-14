@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addReminder, deleteReminder } from "../Utilities/ServerRequests";
 import DatePicker from "react-datepicker";
@@ -22,6 +22,7 @@ const itemSchema = z.object({
       message: "Must be between 1 and 365",
     }),
   unit_time: z.enum(["day", "week", "month", "year"]),
+  reccuring: z.boolean()
 });
 
 // Creating the type for reminders sent to server. if the optional id is included, the item will be updated, otherwise it will be added.
@@ -100,6 +101,7 @@ export const ItemDetails = ({
       reminder: "",
       number: "" as unknown as number,
       unit_time: "day",
+      reccuring: false
     });
 
   // Submission
@@ -234,7 +236,7 @@ export const ItemDetails = ({
       <h3>{active? "Update": "Add New"}</h3>
       <form id="addReminder" onSubmit={handleSubmit(onSubmit)}>
         <div className="row mt-1 w-100 mw-100 mx-0 px-0">
-          <div className="col-5 ms-0">
+          <div className="col-2 ms-0">
             <label className="form-label" htmlFor="Date">
               Start date
             </label>
@@ -267,6 +269,18 @@ export const ItemDetails = ({
               <p className="text-danger">{errors.date.message}</p>
             )}
           </div>
+          <div className="col-2 ms-0">
+          <label className="form-label">Reccuring?</label>
+            <input
+              {...register("reccuring")}
+              id="recurs"
+              className="form-control"
+              type="checkbox"
+              onChange={() => onChangeHandler()}
+            />
+
+          </div>
+
           <div className="col-3">
             <label className="form-label">Recurs</label>
             <input
