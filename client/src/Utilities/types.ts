@@ -7,19 +7,10 @@ export type ReminderType = {
     date: string,
     reminder_date: string,
     fk_user_id: number,
-    recurs: string
-}
-
-export type UpdatedReminderType = {
-    pk_reminder_id: number,
-    subject: string,
-    body?: string,
-    date: string,
-    reminder_date?: string,
-    fk_user_id: number,
     unit_time?: "day" | "week" | "month" | "year" | undefined 
     unit_count?: number,
     fk_trigger_id?: number,
     files?: BinaryType,
-    recurring: boolean
+    recurring: boolean,
+    body?: string,
 }

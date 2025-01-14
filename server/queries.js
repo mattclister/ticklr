@@ -19,7 +19,6 @@ const db = new sqlite3.Database(dbLocation, (err) => {
 // Create User
 async function createUser(req, res) {
   const { userEmail, timeZone, createPassword } = req.body;
-  console.log(createPassword);
 
   // Check if the email is already registered
   const checkEmailQuery = `SELECT pk_user_id FROM users WHERE user_email = ?`;
@@ -157,7 +156,7 @@ async function getReminders(req, res) {
 
 async function getRemindersFromDatabase(userId) {
   return new Promise((resolve, reject) => {
-    const query = `SELECT pk_reminder_id, date, fk_user_id, recurs, reminder_date, title FROM reminders WHERE fk_user_id = ?`;
+    const query = `SELECT pk_reminder_id, date, fk_user_id, reminder_date, title, body, unit_count, unit_time, fk_trigger_id, files, recurring FROM reminders WHERE fk_user_id = ?`;
     db.all(query, [userId], (err, rows) => {
       if (err) {
         console.error("Error querying reminders:", err.message);
@@ -174,7 +173,7 @@ async function getRemindersFromDatabase(userId) {
 async function addReminder(req, res) {
   const authHeader = req.headers.authorization;
   console.log(req.body);
-  const { date, recurs, reminder, reminder_date } = req.body;
+  const { date, reminder_date, title, body, unit_count, unit_time, fk_trigger_id, files, recurring } = req.body;
 
   // if header missing return error
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -205,11 +204,11 @@ async function addReminder(req, res) {
 
       const updateReminderQuery = `
       UPDATE reminders
-      SET date = ?, recurs = ?, title = ?, reminder_date = ?
+      SET date = ?, title = ?, reminder_date = ?, body = ?, unit_count = ?, unit_time = ?, fk_trigger_id = ?, files = ?, recurring = ? 
       WHERE pk_reminder_id = ?;
     `;
 
-      const values = [date, recurs, reminder, reminder_date, pk_reminder_id];
+      const values = [date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring, pk_reminder_id];
 
       db.run(updateReminderQuery, values, function (err) {
         if (err) {
@@ -228,11 +227,11 @@ async function addReminder(req, res) {
 
     if (!req.body.pk_reminder_id) {
       // Add reminder to database
-      const createReminderQuery = `INSERT INTO reminders (date, fk_user_id, recurs, title, reminder_date) VALUES (?, ?, ?, ?, ?)`;
+      const createReminderQuery = `INSERT INTO reminders (fk_user_id, date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
       db.run(
         createReminderQuery,
-        [date, tokenUserId, recurs, reminder, reminder_date],
+        [fk_user_id, date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring],
         function (err) {
           if (err) {
             console.error("Error inserting user:", err.message);

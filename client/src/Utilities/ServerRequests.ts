@@ -1,9 +1,8 @@
 import { FormData } from "../Components/UserRegisterForm";
 import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
-import { NewReminderType } from "../Components/ItemDetails";
-import { convertRecurs } from "./helperFunctions";
 import {settingsType} from "../Components/Settings";
+import { ReminderType } from "./types";
 
 const apiClient = axios.create({
   baseURL: process.env.BASE_URL,
@@ -17,16 +16,14 @@ export const CreateUser = async (data: FormData, setshowSignUp: React.Dispatch<R
     confirmPassword: undefined,
   };
 
-  console.log(formDataPacket);
-
   apiClient
     .post("/users", formDataPacket)
     .then((response) => {
-      console.log("Data submitted successfully", response.data);
+      console.log("User created", response.data);
       setshowSignUp(false)
     })
     .catch((error) => {
-      console.error("Error submitting data", error);
+      console.error("Failed to create user", error);
     });
 };
 
@@ -83,14 +80,13 @@ export const getReminders = async () => {
 
 // Add Reminder
 
-export const addReminder = async (newReminder: NewReminderType) => {
-  let postableReminder = convertRecurs(newReminder)
+export const addReminder = async (newReminder: ReminderType) => {
   let token = localStorage.getItem("webToken");
 
   try {
     const response = await apiClient.post(
       "/reminders",
-      postableReminder,
+      newReminder,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

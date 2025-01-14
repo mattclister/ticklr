@@ -3,13 +3,8 @@ const jwt = require("jsonwebtoken");
 const path = require("path")
 const dbLocation = process.env.DB_LOCATION ? path.join(__dirname, process.env.DB_LOCATION) : path.join(__dirname, 'ticklerDB.db');
 const db = new sqlite3.Database(dbLocation);
-
+const dayjs = require ("./node_modules/dayjs")
 require("dotenv").config();
-const {
-  returnReminderDate,
-  RecursToUnit,
-  RecursToNumber,
-} = require("./ConversionFunctions.js");
 
 // Mailgun modules and constants
 const { FormData } = require("undici");
@@ -21,19 +16,14 @@ const mg = mailgun.client({
   url: "https://api.eu.mailgun.net",
 });
 
+// Mark a reminder as sent
 const marksent = (record, sentDate) => {
   const updateQuery = `UPDATE reminders 
   SET last_sent = ?, reminder_date = ? 
   WHERE pk_reminder_id = ?;`;
 
-  const unit = RecursToUnit(record.recurs);
-  const number = RecursToNumber(record.recurs);
-
-  const newReminderDate = returnReminderDate(
-    record.reminder_date,
-    number,
-    unit
-  );
+  const reminder_date = dayjs(record.reminder_date)
+  const newReminderDate = reminder_date.add(unit_count, unit_time);
 
   db.run(updateQuery, [sentDate, newReminderDate, record.pk_reminder_id]);
 };
@@ -79,7 +69,7 @@ const sendEmails = async () => {
               from: "Reminders <reminders@ticklr.app>",
               to: record.reminder_email,
               subject: record.title,
-              text: `${record.title}
+              text: `${record.body}
               Sent via tickler`,
             })
             .then((msg) => {

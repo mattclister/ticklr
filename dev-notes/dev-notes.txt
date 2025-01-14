@@ -1,14 +1,15 @@
 Places to fix dataformat:
 - Client:
-    - ItemDetails
-    - RemindersList
-    - RemindersPage
-    - Helperfunctions
-    - Server Requests
-    - types
+    - ItemDetails X
+    - RemindersList X
+    - RemindersPage X
+    - Helperfunctions X
+    - Server Requests X
+    - types X
 - Server:
-    - Conversion Functions
-    - Queries
+    - Conversion Functions X
+    - Queries X
+    - Scheduled Functions 
 
 
     export type UpdatedReminderType = {

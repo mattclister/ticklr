@@ -28,8 +28,6 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
         const requestedData:ReminderType[] = await getReminders();
         setReminderData(requestedData);
         setLoading(false);
-        console.log(requestedData)
-        console.log(reminderdata)
       } catch (error) {
         console.error("Error fetching reminders:", error);
         setLoading(false);
@@ -74,7 +72,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
                   <h6>{dayjs(item.reminder_date as string).format('DD-MMM')}</h6>
                 </div>
                 <div className="col">{item.title.length>40?item.title.slice(0,40)+"...":item.title}</div>
-                <div className="col">{item.recurs}</div>
+                <div className="col">{`${item.unit_count} ${item.unit_time}`}</div>
               </div>
             </li>
           ))}

@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { boolean, z } from "zod";
+import { boolean, unknown, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addReminder, deleteReminder } from "../Utilities/ServerRequests";
 import DatePicker from "react-datepicker";
@@ -7,7 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
 import { ReminderType } from "../Utilities/types";
 import dayjs from "dayjs";
-import { ConvertNewReminderToReminder } from "../Utilities/helperFunctions";
 
 // Zod schema
 const itemSchema = z.object({
@@ -24,13 +23,6 @@ const itemSchema = z.object({
   unit_time: z.enum(["day", "week", "month", "year"]),
   reccuring: z.boolean()
 });
-
-// Creating the type for reminders sent to server. if the optional id is included, the item will be updated, otherwise it will be added.
-type zodNewReminderType = z.infer<typeof itemSchema>;
-
-export type NewReminderType = zodNewReminderType & {
-  pk_reminder_id?: number;
-};
 
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,7 +44,7 @@ export const ItemDetails = ({
     reset,
     formState: { errors },
     formState,
-  } = useForm<NewReminderType>({
+  } = useForm<ReminderType>({
     resolver: zodResolver(itemSchema),
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -63,33 +55,20 @@ export const ItemDetails = ({
 
   useEffect(() => {
 
-    const conversions = {
-      w: "week",
-      d: "day",
-      m: "month",
-      y: "year",
-    } as const;
-
     if (active) {
-      const unitkey = active.recurs?.slice(-1) as keyof typeof conversions;
 
-      if (unitkey && conversions[unitkey]) {
         reset({
           date: dayjs(active.date as string).format("YYYY-MM-DD"),
-          reminder: active.title,
-          number: active.recurs.slice(0, -1) as unknown as number,
-          unit_time: conversions[unitkey],
+          title: active.title,
+          unit_count: active.unit_count,
+          unit_time: active.unit_time
         });
       } else {
-        console.warn(`Invalid unit in recurs: ${unitkey}`);
         resetFormToBlank();
       }
-    }
-
     if (!active) {
       console.log("no active reminder, reseting...");
       resetFormToBlank();
-      console.log(active);
     }
   }, [active, reset]);
 
@@ -97,55 +76,51 @@ export const ItemDetails = ({
 
   const resetFormToBlank = () =>
     reset({
-      date: "",
-      reminder: "",
-      number: "" as unknown as number,
-      unit_time: "day",
-      reccuring: false
+    title: undefined,
+    date: undefined,
+    reminder_date: undefined,
+    unit_time: undefined,
+    unit_count: undefined,
+    files: undefined,
+    recurring: false,
+    body: undefined,
     });
 
   // Submission
 
   const [tempID,setTempId] = useState<number>(-1)
 
-  const onSubmit = async (data: NewReminderType) => {
+  const onSubmit = async (data: ReminderType) => {
     console.log(data)
 
     const newTempID = tempID
-    console.log(`The temporary id is: ${newTempID}`)
-
+  
     try {
-      const submissionData = {
+      // If active, set pk to active value else assign tempID
+      const submissionData: ReminderType = {
         ...data,
-        ...(active?.pk_reminder_id && {
-          pk_reminder_id: active.pk_reminder_id,
-        })
-      };
+        pk_reminder_id: active?.pk_reminder_id ? active.pk_reminder_id: newTempID,
+        }
+
+      setTempId(prevTempId => prevTempId - 1);
 
       // Optamistically update state and GUI
 
     if (!active){
-      const reminder = ConvertNewReminderToReminder(data,newTempID,newTempID)
-      console.log(`The converted Reminder (new) is:${JSON.stringify(reminder, null, 2)}`)
       setReminderData(previousData => [
         ...previousData || [], 
-        reminder
+        submissionData
     ]);}
 
     if (active) {
-      const reminder = ConvertNewReminderToReminder(data,active.fk_user_id,active.pk_reminder_id)
-      console.log(`The converted Reminder (update) is:${JSON.stringify(reminder, null, 2)}`)
       setReminderData(previousData =>
         previousData?.map((item) =>
-          item.pk_reminder_id === active.pk_reminder_id ? { ...item, ...reminder} : item
+          item.pk_reminder_id === active.pk_reminder_id ? { ...item, ...submissionData} : item
         )
       );
     }
     
-      setTempId(prevTempId => prevTempId - 1);
-
     await addReminder(submissionData).then((res) => {
-      console.log(res)
       setReminderData((previousData) =>
         previousData?.map((item) =>
           item.pk_reminder_id === newTempID
@@ -188,7 +163,8 @@ export const ItemDetails = ({
     setEdited(false);
   };
 
-  
+  // Deletion
+
   const onDelete = async () => {
     // Check active is not null
     if (!active) {
@@ -196,14 +172,14 @@ export const ItemDetails = ({
       return;
     }
   
-    // Optimistic update
+    // Optimistic delete
     setReminderData((previousData) => {
       if (!previousData) return [];
       return previousData.filter((item) => item.pk_reminder_id !== active.pk_reminder_id);
     });
   
     try {
-      // Call delete API
+      // Call delete
       await deleteReminder(active.pk_reminder_id);
       setSuccessMessage("Reminder Deleted");
       resetFormToBlank();
@@ -272,10 +248,12 @@ export const ItemDetails = ({
           <div className="col-2 ms-0">
           <label className="form-label">Reccuring?</label>
             <input
-              {...register("reccuring")}
+              {...register("recurring")}
               id="recurs"
               className="form-control"
               type="checkbox"
+              value="true"
+              defaultValue="false"
               onChange={() => onChangeHandler()}
             />
 
@@ -284,17 +262,15 @@ export const ItemDetails = ({
           <div className="col-3">
             <label className="form-label">Recurs</label>
             <input
-              {...register("number")}
+              {...register("unit_count")}
               id="Number"
               placeholder="Number"
               className="form-control"
               type="number"
-              min="1"
-              max="365"
               onChange={() => onChangeHandler()}
             />
-            {errors.number && (
-              <p className="text-danger">{errors.number.message}</p>
+            {errors.unit_count && (
+              <p className="text-danger">{errors.unit_count.message}</p>
             )}
           </div>
           <div className="col-4 me-0">
@@ -317,18 +293,18 @@ export const ItemDetails = ({
           </div>
         </div>
         <div className="row mx-1 mt-2">
-          <label className="form-label" htmlFor="Reminder">
+          <label className="form-label" htmlFor="title">
             Reminder
           </label>
           <input
-            {...register("reminder")}
+            {...register("title")}
             id="Reminder"
             className="form-control"
             type="text"
             onChange={() => onChangeHandler()}
           />
-          {errors.reminder && (
-            <p className="text-danger">{errors.reminder.message}</p>
+          {errors.title && (
+            <p className="text-danger">{errors.title.message}</p>
           )}
         </div>
 
