@@ -246,19 +246,16 @@ export const ItemDetails = ({
             )}
           </div>
           <div className="col-2 ms-0">
-          <label className="form-label">Reccuring?</label>
             <input
               {...register("recurring")}
-              id="recurs"
-              className="form-control"
+              id="reccuring-check"
+              className="form-check-input"
               type="checkbox"
               value="true"
-              defaultValue="false"
               onChange={() => onChangeHandler()}
             />
-
+            <label htmlFor="reccuring-check" className="form-check-label">Reccuring?</label>
           </div>
-
           <div className="col-3">
             <label className="form-label">Recurs</label>
             <input
