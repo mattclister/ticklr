@@ -72,7 +72,7 @@ export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive
                   <h6>{dayjs(item.reminder_date as string).format('DD-MMM')}</h6>
                 </div>
                 <div className="col">{item.title.length>40?item.title.slice(0,40)+"...":item.title}</div>
-                <div className="col">{`${item.unit_count} ${item.unit_time}`}</div>
+                <div className="col">{item.unit_count? `${item.unit_count} ${item.unit_time}s`:""}</div>
               </div>
             </li>
           ))}
