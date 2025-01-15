@@ -21,6 +21,7 @@
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
+    "bootstrap-toggle": "^2.2.2",
     "dayjs": "^1.11.13",
     "express": "^4.21.0",
     "framer-motion": "^11.13.5",

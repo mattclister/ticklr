@@ -81,6 +81,8 @@ export const getReminders = async () => {
 // Add Reminder
 
 export const addReminder = async (newReminder: ReminderType) => {
+  console.log("Requesting add Reminder")
+  console.log(newReminder)
   let token = localStorage.getItem("webToken");
 
   try {

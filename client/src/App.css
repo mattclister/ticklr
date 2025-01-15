@@ -362,3 +362,10 @@ cursor: pointer;
   color: #ffff;
 }
 
+/*Switches*/
+
+.custom-switch {
+  transform: scale(2);
+  display: inline-flex;
+  margin-top: 0.4em;
+}

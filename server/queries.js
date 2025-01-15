@@ -172,6 +172,7 @@ async function getRemindersFromDatabase(userId) {
 
 async function addReminder(req, res) {
   const authHeader = req.headers.authorization;
+  console.log("Adding to DB")
   console.log(req.body);
   const { date, reminder_date, title, body, unit_count, unit_time, fk_trigger_id, files, recurring } = req.body;
 
@@ -199,7 +200,7 @@ async function addReminder(req, res) {
 
     // if reminder id in request, update. Else add to database.
 
-    if (req.body.pk_reminder_id) {
+    if (req.body.pk_reminder_id>0) {
       const pk_reminder_id = req.body.pk_reminder_id;
 
       const updateReminderQuery = `
@@ -208,7 +209,7 @@ async function addReminder(req, res) {
       WHERE pk_reminder_id = ?;
     `;
 
-      const values = [date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring, pk_reminder_id];
+      const values = [date, title, date, body, unit_count, unit_time, fk_trigger_id, files, recurring, pk_reminder_id];
 
       db.run(updateReminderQuery, values, function (err) {
         if (err) {
@@ -225,13 +226,13 @@ async function addReminder(req, res) {
       });
     }
 
-    if (!req.body.pk_reminder_id) {
+    if (req.body.pk_reminder_id<0) {
       // Add reminder to database
       const createReminderQuery = `INSERT INTO reminders (fk_user_id, date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
       db.run(
         createReminderQuery,
-        [fk_user_id, date, title, reminder_date, body, unit_count, unit_time, fk_trigger_id, files, recurring],
+        [tokenUserId, date, title, date, body, unit_count, unit_time, fk_trigger_id, files, recurring],
         function (err) {
           if (err) {
             console.error("Error inserting user:", err.message);
