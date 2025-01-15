@@ -22,8 +22,12 @@ const marksent = (record, sentDate) => {
   SET last_sent = ?, reminder_date = ? 
   WHERE pk_reminder_id = ?;`;
 
+  const newReminderDate = null
+
+  if (record.recurring) {
   const reminder_date = dayjs(record.reminder_date)
-  const newReminderDate = reminder_date.add(unit_count, unit_time);
+  newReminderDate = reminder_date.add(unit_count, unit_time);
+  } else {newReminderDate = null}
 
   db.run(updateQuery, [sentDate, newReminderDate, record.pk_reminder_id]);
 };
