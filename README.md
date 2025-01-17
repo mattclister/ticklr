@@ -70,3 +70,16 @@ The solution I found was to build the docker image in steps and in one of those 
 #### Contact
 
 Thank you for looking at ticklr which continues to be developed. I am available to hire and contactable at: matt.c.lister (at) gmail.com
+
+#### Roadmap
+
+- Add search / filter bar
+- Add multiple trigger pathways
+- Add Toast nofications for success
+- Automatic email validation on sign up
+- Add files to reminders
+- Add Body to reminders
+- Store JWT in cookie
+- Add documentation and link to it in settings
+- Menu on right on widescreens
+- Item menue for active item
