@@ -9,6 +9,7 @@ require("dotenv").config();
 // Mailgun modules and constants
 const { FormData } = require("undici");
 const Mailgun = require("mailgun.js");
+const { Console } = require("console");
 const mailgun = new Mailgun(FormData);
 const mg = mailgun.client({
   username: "api",
@@ -29,6 +30,8 @@ const marksent = (record, sentDate) => {
   newReminderDate = reminder_date.add(unit_count, unit_time);
   } else {newReminderDate = null}
 
+console.log("Marking as Sent")
+console.log(`New reminder date: ${newReminderDate}, sentDate: ${sentDate}, recordID: ${record.pk_reminder_id}`)
   db.run(updateQuery, [sentDate, newReminderDate, record.pk_reminder_id]);
 };
 
