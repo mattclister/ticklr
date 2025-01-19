@@ -26,11 +26,11 @@ const marksent = (record, sentDate) => {
   SET last_sent = ?, reminder_date = ? 
   WHERE pk_reminder_id = ?;`;
 
-  const newReminderDate = null
+  let newReminderDate = null
 
-  if (record.recurring && unit_count && unit_time) {
-  const reminder_date = dayjs(record.reminder_date)
-  newReminderDate = reminder_date.add(unit_count, unit_time);
+  if (record.recurring && record.unit_count && record.unit_time) {
+  let reminder_date = dayjs(record.reminder_date)
+  newReminderDate = reminder_date.add(record.unit_count, record.unit_time);
   } else {newReminderDate = null}
 
 console.log("Marking as Sent")
