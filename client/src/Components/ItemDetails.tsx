@@ -265,7 +265,7 @@ export const ItemDetails = ({
                 id="unit_count"
                 className="form-control"
                 type="number"
-                defaultValue="1"
+                placeholder="Number"
               />
               {errors.unit_count && <p className="text-danger">{errors.unit_count.message}</p>}
             </div>

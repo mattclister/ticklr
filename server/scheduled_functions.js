@@ -28,7 +28,7 @@ const marksent = (record, sentDate) => {
 
   const newReminderDate = null
 
-  if (record.recurring) {
+  if (record.recurring && unit_count && unit_time) {
   const reminder_date = dayjs(record.reminder_date)
   newReminderDate = reminder_date.add(unit_count, unit_time);
   } else {newReminderDate = null}
