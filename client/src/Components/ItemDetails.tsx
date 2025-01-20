@@ -10,43 +10,45 @@ import dayjs from "dayjs";
 
 // Zod schema
 const itemSchema = z
-  .object({
-    date: z.string().refine((val) => !isNaN(new Date(val).getTime()), {
-      message: "Invalid date format",
+.object({
+  date: z.string().refine((val) => !isNaN(new Date(val).getTime()), {
+    message: "Invalid date format",
+  }),
+  title: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
+  unit_count: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((val) => {
+      if (typeof val === 'string') {
+        return val ? parseInt(val, 10) : undefined;
+      }
+      return val;
     }),
-    title: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
-    unit_count: z
-    .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => !isNaN(val) && val >= 1 && val <= 365, {
-      message: "Must be between 1 and 365",
-    }).nullable(),
-    unit_time: z.enum(["day", "week", "month", "year"]).nullable(),
-    recurring: z.boolean(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.recurring) {
-      if (!data.unit_count) {
-        ctx.addIssue({
-          path: ["unit_count"],
-          message: "Unit count is required when recurring is true",
-          code: "custom",
-        });
-      }
-
-      if (!data.unit_time) {
-        ctx.addIssue({
-          path: ["unit_time"],
-          message: "Unit time is required when recurring is true",
-          code: "custom",
-        });
-      }
-    } else {
-      data.unit_count = null;
-      data.unit_time = null;
+  unit_time: z.enum(["day", "week", "month", "year"]).nullable(),
+  recurring: z.boolean(),
+})
+.superRefine((data, ctx) => {
+  if (data.recurring) {
+    if (data.unit_count === undefined) {
+      ctx.addIssue({
+        path: ["unit_count"],
+        message: "Unit count is required when recurring is true",
+        code: "custom",
+      });
     }
-  });
 
+    if (!data.unit_time) {
+      ctx.addIssue({
+        path: ["unit_time"],
+        message: "Unit time is required when recurring is true",
+        code: "custom",
+      });
+    }
+  } else {
+    data.unit_count = undefined;
+    data.unit_time = "day";
+  }
+});
 
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,6 +68,7 @@ export const ItemDetails = ({
     handleSubmit,
     control,
     reset,
+    formState,
     formState: { errors, isDirty },
     watch,
   } = useForm<ReminderType>({
@@ -99,7 +102,7 @@ export const ItemDetails = ({
       title: "",
       date: "",
       unit_time: "day",
-      unit_count: 1,
+      unit_count: undefined,
       recurring: false,
     });
   };
@@ -264,9 +267,7 @@ export const ItemDetails = ({
                 {...register("unit_count")}
                 id="unit_count"
                 className="form-control"
-                type="number"
-                placeholder="Number"
-              />
+                              />
               {errors.unit_count && <p className="text-danger">{errors.unit_count.message}</p>}
             </div>
 

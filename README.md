@@ -83,3 +83,4 @@ Thank you for looking at ticklr which continues to be developed. I am available 
 - Add documentation and link to it in settings
 - Menu on right on widescreens
 - Item menue for active item
+- Purge CSS/ reduce CSS size

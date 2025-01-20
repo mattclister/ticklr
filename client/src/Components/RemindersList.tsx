@@ -12,11 +12,10 @@ interface Props {
   setReminderData: React.Dispatch<React.SetStateAction<ReminderType[] | undefined>>;
   setTopBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
   bottomBarVisible: boolean;
-  topBarVisible: boolean;}
+  topBarVisible: boolean}
 
 export const RemindersList = ({ setTopBarVisible, setBottomBarVisible, setActive, active, reminderdata, setReminderData, bottomBarVisible, topBarVisible}: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
-
   const activehandler = (reminderdata: ReminderType[], id: Number) => {
     setActive(reminderdata.filter((item) => item.pk_reminder_id === id)[0])
   }
