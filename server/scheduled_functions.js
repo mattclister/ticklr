@@ -30,7 +30,7 @@ const marksent = (record, sentDate) => {
 
   if (record.recurring && record.unit_count && record.unit_time) {
   let reminder_date = dayjs(record.reminder_date)
-  newReminderDate = reminder_date.add(record.unit_count, record.unit_time);
+  newReminderDate = reminder_date.add(record.unit_count, record.unit_time).toISOString();
   } else {newReminderDate = null}
 
 console.log("Marking as Sent")
