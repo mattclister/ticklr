@@ -7,48 +7,56 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
 import { ReminderType } from "../Utilities/types";
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+dayjs.extend(isSameOrAfter); 
+
 
 // Zod schema
 const itemSchema = z
-.object({
-  date: z.string().refine((val) => !isNaN(new Date(val).getTime()), {
-    message: "Invalid date format",
-  }),
-  title: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
-  unit_count: z
-    .union([z.string(), z.number()])
-    .optional()
-    .transform((val) => {
-      if (typeof val === 'string') {
-        return val ? parseInt(val, 10) : undefined;
+  .object({
+    date: z
+      .string()
+      .refine((val) => {
+        const parsedDate = dayjs(val);
+        return parsedDate.isValid();
+      }, {
+        message: "Invalid date format",
+      }),
+    title: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
+    unit_count: z
+      .union([z.string(), z.number()])
+      .optional()
+      .transform((val) => {
+        if (typeof val === 'string') {
+          return val ? parseInt(val, 10) : undefined;
+        }
+        return val;
+      }),
+    unit_time: z.enum(["day", "week", "month", "year"]).nullable(),
+    recurring: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.recurring) {
+      if (data.unit_count === undefined) {
+        ctx.addIssue({
+          path: ["unit_count"],
+          message: "Unit count is required when recurring is true",
+          code: "custom",
+        });
       }
-      return val;
-    }),
-  unit_time: z.enum(["day", "week", "month", "year"]).nullable(),
-  recurring: z.boolean(),
-})
-.superRefine((data, ctx) => {
-  if (data.recurring) {
-    if (data.unit_count === undefined) {
-      ctx.addIssue({
-        path: ["unit_count"],
-        message: "Unit count is required when recurring is true",
-        code: "custom",
-      });
+      if (!data.unit_time) {
+        ctx.addIssue({
+          path: ["unit_time"],
+          message: "Unit time is required when recurring is true",
+          code: "custom",
+        });
+      }
+    } else {
+      data.unit_count = undefined;
+      data.unit_time = "day";
     }
+  });
 
-    if (!data.unit_time) {
-      ctx.addIssue({
-        path: ["unit_time"],
-        message: "Unit time is required when recurring is true",
-        code: "custom",
-      });
-    }
-  } else {
-    data.unit_count = undefined;
-    data.unit_time = "day";
-  }
-});
 
 type ItemDetailsProps = {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -261,7 +269,6 @@ export const ItemDetails = ({
         </div>
 
         {/* Recurs Section: Display only when recurring is checked */}
-        {recurring && (
           <div className="row mt-1 w-100 mx-0">
             <h6 className="text-center">Every</h6>
             {/* Unit Count */}
@@ -269,7 +276,11 @@ export const ItemDetails = ({
               <input
                 {...register("unit_count")}
                 id="unit_count"
+                type="number"
+                max="365"
+                min="1"
                 className="form-control"
+                disabled={!recurring}
                               />
               {errors.unit_count && <p className="text-danger">{errors.unit_count.message}</p>}
             </div>
@@ -281,6 +292,7 @@ export const ItemDetails = ({
                 id="unit_time"
                 className="form-control"
                 defaultValue="day"
+                disabled={!recurring}
               >
                 <option value="day">Day(s)</option>
                 <option value="week">Week(s)</option>
@@ -290,7 +302,6 @@ export const ItemDetails = ({
               {errors.unit_time && <p className="text-danger">{errors.unit_time.message}</p>}
             </div>
           </div>
-        )}
 
         {/* Submit and Cancel Buttons */}
         <div>
