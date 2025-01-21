@@ -30,6 +30,7 @@
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
+    "react-toastify": "^11.0.3",
     "rsuite": "^5.74.2",
     "vitest": "^2.1.8",
     "zod": "^3.23.8"

@@ -3,6 +3,8 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { RemindersPage } from "./Components/RemindersPage";
 import { AuthenticateUser } from "./Utilities/ServerRequests";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -52,7 +54,9 @@ function App() {
   } else {
     // If user authenticated, auto login else show login page
 
-    return <>{loggedIn ? <RemindersPage handleLogOut={handleLogOut}/> : <LoginPage handleSetLogIn={handleSetLogIn}/>}</>;
+    return <>
+    <ToastContainer position="top-center" autoClose={2000}/>
+    {loggedIn ? <RemindersPage handleLogOut={handleLogOut}/> : <LoginPage handleSetLogIn={handleSetLogIn}/>}</>;
   }
 }
 

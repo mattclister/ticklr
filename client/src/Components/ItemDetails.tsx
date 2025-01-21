@@ -7,9 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
 import { ReminderType } from "../Utilities/types";
 import dayjs from "dayjs";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-dayjs.extend(isSameOrAfter); 
-
+import { notify } from "../Utilities/notifications";
 
 // Zod schema
 const itemSchema = z
@@ -123,8 +121,6 @@ export const ItemDetails = ({
         pk_reminder_id: active?.pk_reminder_id ? active.pk_reminder_id : newTempID,
         reminder_date: data.date
       };
-      console.log("The submission data is:")
-      console.log(submissionData)
 
       // Optimistically update state and GUI
       if (!active) {
@@ -155,18 +151,17 @@ export const ItemDetails = ({
 
       if (!active) {
         resetFormToBlank();
-        setSuccessMessage("Reminder Added!!");
+        notify("Reminder Added!!","success")
         setEdited(false);
       }
 
       if (active) {
-        setSuccessMessage("Reminder Updated!!");
+        notify("Reminder Updated!!","success")
         setEdited(false);
       }
     } catch (error) {
-      console.error("Error adding reminder:", error);
-      setSuccessMessage("Failed to update");
-      setReminderData((previousData) =>
+        notify("Error adding reminder","error")
+        setReminderData((previousData) =>
         previousData?.filter((item) => item.pk_reminder_id !== -1)
       );
     }
@@ -176,13 +171,12 @@ export const ItemDetails = ({
     setActive(undefined); 
     resetFormToBlank();
     setBottomBarVisible(false);
-    setSuccessMessage(" "); 
     setEdited(false);
   };
 
   const onDelete = async () => {
     if (!active) {
-      console.error("No active reminder selected for deletion.");
+      notify("Failed to delete","error")
       return;
     }
 
@@ -192,12 +186,12 @@ export const ItemDetails = ({
 
     try {
       await deleteReminder(active.pk_reminder_id);
-      setSuccessMessage("Reminder Deleted");
+      notify("Reminder deleted","success");
       resetFormToBlank();
       setEdited(false);
     } catch (error) {
       setReminderData((previousData) => [...(previousData || []), active]);
-      console.error("Failed to delete reminder:", error);
+      notify("Failed to delete","error")
       setSuccessMessage("Failed to delete reminder");
     }
   };

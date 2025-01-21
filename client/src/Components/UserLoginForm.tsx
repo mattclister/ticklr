@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { LoginUser } from "../Utilities/ServerRequests";
+import { notify } from "../Utilities/notifications";
 
 export type LoginData = {
   user_email: string;
@@ -26,8 +27,10 @@ export const UserLoginForm = ({handleSetLogIn}:LoginProps ) => {
  
       if (result) {
         handleSetLogIn();
+        notify(`User Logged in`,"success")
       } else {
         setFailedToLogin(failedToLogin+1)
+        notify(`Login details not recognised`,"warn")
       }
 
     } catch (error) {
@@ -54,7 +57,6 @@ export const UserLoginForm = ({handleSetLogIn}:LoginProps ) => {
         value={userPassword}
         onChange={(e) => setUserPassword(e.target.value)}
       ></input>
-      {failedToLogin>0?<div className="alert alert-warning" role="alert">Failed to Login x{failedToLogin}</div>:null}
       <button
         type="button"
         className="btn btn-primary w-100 login-btn"

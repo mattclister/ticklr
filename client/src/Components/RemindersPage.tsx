@@ -5,6 +5,7 @@ import logo from "../assets/ticklrLogo.png";
 import { ItemDetails } from "./ItemDetails";
 import { ReminderType } from "../Utilities/types";
 import { AnimatePresence, motion } from "framer-motion";
+import { notify } from "../Utilities/notifications";
 
 interface RemindersPageProps {
   handleLogOut: () => void;
@@ -17,6 +18,7 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
   const [reminderdata, setReminderData] = useState<
     ReminderType[] | undefined
   >();
+  
 
   // Use Effect on Active change
    useEffect(() => {
