@@ -3,6 +3,7 @@ import { LoginData } from "../Components/UserLoginForm";
 import axios from "axios";
 import {settingsType} from "../Components/Settings";
 import { ReminderType } from "./types";
+import { notify } from "./notifications";
 
 const apiClient = axios.create({
   baseURL: process.env.BASE_URL,
@@ -19,11 +20,11 @@ export const CreateUser = async (data: FormData, setshowSignUp: React.Dispatch<R
   apiClient
     .post("/users", formDataPacket)
     .then((response) => {
-      console.log("User created", response.data);
+      notify("User Created!!","success")
       setshowSignUp(false)
     })
     .catch((error) => {
-      console.error("Failed to create user", error);
+      notify("Failed to create user","error")
     });
 };
 
@@ -37,7 +38,6 @@ export const LoginUser = async (data: LoginData) => {
     
     return true
   } catch (error) {
-    console.log("Failed to Login", error);
     return false
   }
 };

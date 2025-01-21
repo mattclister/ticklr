@@ -75,6 +75,7 @@ export const ItemDetails = ({
     control,
     reset,
     formState,
+    setFocus,
     formState: { errors, isDirty },
     watch,
   } = useForm<ReminderType>({
@@ -99,6 +100,7 @@ export const ItemDetails = ({
       });
     } else {
       resetFormToBlank();
+      setFocus('date')
     }
   }, [active, reset]);
 
@@ -153,11 +155,13 @@ export const ItemDetails = ({
         resetFormToBlank();
         notify("Reminder Added!!","success")
         setEdited(false);
+        setBottomBarVisible(false)
       }
 
       if (active) {
         notify("Reminder Updated!!","success")
         setEdited(false);
+        setBottomBarVisible(false)
       }
     } catch (error) {
         notify("Error adding reminder","error")
@@ -186,13 +190,13 @@ export const ItemDetails = ({
 
     try {
       await deleteReminder(active.pk_reminder_id);
-      notify("Reminder deleted","success");
+      notify("Reminder deleted","warn");
       resetFormToBlank();
       setEdited(false);
     } catch (error) {
       setReminderData((previousData) => [...(previousData || []), active]);
       notify("Failed to delete","error")
-      setSuccessMessage("Failed to delete reminder");
+      setBottomBarVisible(false);
     }
   };
 
