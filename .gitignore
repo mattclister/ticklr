@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 test-deploy.yml
 .dev-notes
+ticklerDB.db
 
 node_modules
 *.node_modules
