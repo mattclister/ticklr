@@ -113,7 +113,10 @@ export const ItemDetails = ({
       const submissionData: ReminderType = {
         ...data,
         pk_reminder_id: active?.pk_reminder_id ? active.pk_reminder_id : newTempID,
+        reminder_date: data.date
       };
+      console.log("The submission data is:")
+      console.log(submissionData)
 
       // Optimistically update state and GUI
       if (!active) {
