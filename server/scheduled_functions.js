@@ -19,12 +19,11 @@ const mg = mailgun.client({
 
 // Mark a reminder as sent
 const marksent = (record, sentDate) => {
-  console.log("Marking as sent:")
-  console.log(record)
-  console.log(sentDate)
   const updateQuery = `UPDATE reminders 
   SET last_sent = ?, reminder_date = ? 
   WHERE pk_reminder_id = ?;`;
+
+  console.log(`Marking sent: ${record.unit_count} ${record.unit_time}`)
 
   let newReminderDate = null
 

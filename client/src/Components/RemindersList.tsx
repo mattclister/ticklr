@@ -96,12 +96,15 @@ export const RemindersList = ({
                   }}
                 >
                   <div className="row align-items-center">
-                    <div className="col-4">
+                    <div className="col">
                       <h6>
-                        {dayjs(item.reminder_date as string).format("DD-MMM")}
+                      {item.reminder_date===null? dayjs(item.date as string).format("DD-MMM"):
+                        dayjs(item.reminder_date as string).format("DD-MMM")}
                       </h6>
                     </div>
                     <div className="col">
+                  </div>
+                    <div className="col-4">
                       {item.title.length > 40
                         ? item.title.slice(0, 40) + "..."
                         : item.title}
