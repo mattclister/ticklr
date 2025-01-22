@@ -6,6 +6,7 @@ import React from "react";
 import { notify } from "../Utilities/notifications";
 import { Dropdown } from "react-bootstrap";
 import more from "../assets/more.png";
+import { deleteReminder } from "../Utilities/ServerRequests";
 
 const handleSelect = (eventKey: any) => {
   console.log(`Selected: ${eventKey}`);
@@ -23,6 +24,7 @@ interface Props {
   bottomBarVisible: boolean;
   topBarVisible: boolean;
 }
+
 
 export const RemindersList = ({
   setBottomBarVisible,
@@ -57,6 +59,29 @@ export const RemindersList = ({
     setActive(undefined);
     setBottomBarVisible(true);
   };
+
+    const onDelete = async () => {
+      setBottomBarVisible(false);
+      if (!active) {
+        notify("Failed to delete","error")
+        setActive(undefined)
+        return;
+      }
+  
+      setReminderData((previousData) =>
+        previousData?.filter((item) => item.pk_reminder_id !== active.pk_reminder_id)
+      );
+  
+      try {
+        await deleteReminder(active.pk_reminder_id);
+        notify("Reminder deleted","warn");
+        setActive(undefined)
+      } catch (error) {
+        setReminderData((previousData) => [...(previousData || []), active]);
+        notify("Failed to delete","error")
+        setActive(undefined)
+      }
+    };
 
   if (loading) {
     return <p>loading...</p>;
@@ -123,7 +148,7 @@ export const RemindersList = ({
                           ><img src={more} alt="more-options" />
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
-                            <Dropdown.Item onClick={()=>notify("Item Deleted","warn")}>Delete</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>onDelete()}>Delete</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                       ) : (
