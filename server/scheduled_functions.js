@@ -78,7 +78,7 @@ const sendEmails = async () => {
               from: "Reminders <reminders@ticklr.app>",
               to: record.reminder_email,
               subject: record.title,
-              text: `${record.body}
+              text: `${record.title}
               Sent via tickler`,
             })
             .then((msg) => {
