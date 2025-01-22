@@ -369,3 +369,25 @@ cursor: pointer;
   display: inline-flex;
   margin-top: 0.4em;
 }
+
+/*Dropdown*/
+
+#dropdown-basic::after {
+  display: none !important;
+}
+
+#dropdown-basic {
+  border: none;
+  background: transparent;
+  height: auto; 
+  width: auto;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+#dropdown-basic img {
+  height: 1rem;
+  width: 1rem; 
+  align-items: center;
+  object-fit: contain;}

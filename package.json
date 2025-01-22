@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "author": "Matt Lister",
-
   "scripts": {
     "install-all": "npm run install:client && npm run install:server && npm run install:docs",
     "install:client": "cd client && npm install",
@@ -19,8 +18,10 @@
     "test": "cd client && npm test && cd ../server && npm test",
     "lint": "cd client && npm run lint"
   },
-  "devDependencies": {},
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8"
   }
 }

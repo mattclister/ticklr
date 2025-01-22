@@ -4,6 +4,12 @@ import { ReminderType } from "../Utilities/types";
 import dayjs from "dayjs";
 import React from "react";
 import { notify } from "../Utilities/notifications";
+import { Dropdown } from "react-bootstrap";
+import more from "../assets/more.png";
+
+const handleSelect = (eventKey: any) => {
+  console.log(`Selected: ${eventKey}`);
+};
 
 interface Props {
   setBottomBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -89,8 +95,8 @@ export const RemindersList = ({
                     activehandler(reminderdata, item.pk_reminder_id);
                   }}
                 >
-                  <div className="row align-items-start">
-                    <div className="col">
+                  <div className="row align-items-center">
+                    <div className="col-4">
                       <h6>
                         {dayjs(item.reminder_date as string).format("DD-MMM")}
                       </h6>
@@ -105,27 +111,21 @@ export const RemindersList = ({
                         ? `${item.unit_count} ${item.unit_time}s`
                         : ""}
                     </div>
-                    <div className="col">
-                    <div className="dropdown">
-                      <button
-                        className="btn btn-secondary dropdown-toggle"
-                        type="button"
-                        id="dropdownMenuButton"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        ...
-                      </button>
-                      <div
-                        className="dropdown-menu"
-                        aria-labelledby="dropdownMenuButton"
-                      >
-                        <a className="dropdown-item" onClick={()=>notify("Deleted","success")}>
-                          Delete
-                        </a>
-                      </div>
-                      </div>
+                    <div className="col d-flex align-items-center justify-content-center">
+                      {item.pk_reminder_id === active?.pk_reminder_id ? (
+                        <Dropdown onSelect={handleSelect}>
+                          <Dropdown.Toggle
+                            variant="primary"
+                            id="dropdown-basic"
+                          ><img src={more} alt="more-options" />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={()=>notify("Item Deleted","warn")}>Delete</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </li>

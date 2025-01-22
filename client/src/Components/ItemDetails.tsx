@@ -22,7 +22,7 @@ const itemSchema = z
       }),
     title: z.string().min(1, "Cannot be empty").max(500, "Max 500 characters"),
     unit_count: z
-      .union([z.string(), z.number()])
+      .union([z.string(), z.number(), z.nan()])
       .optional()
       .transform((val) => {
         if (typeof val === 'string') {
@@ -110,7 +110,7 @@ export const ItemDetails = ({
       title: "",
       date: "",
       unit_time: "day",
-      unit_count: undefined,
+      unit_count: NaN,
       recurring: false,
     });
   };
@@ -150,7 +150,7 @@ export const ItemDetails = ({
             : item
         )
       );
-
+      // Reset update
       if (!active) {
         resetFormToBlank();
         notify("Reminder Added!!","success")
