@@ -48,8 +48,10 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
             id="add-new-menu-btn"
             onClick={() => {
               setActive(undefined);
-              setBottomBarVisible(true);
-              setTopBarVisible(false);
+              setBottomBarVisible(false);
+              setTimeout(() => {
+                setBottomBarVisible(true);
+              }, 350)
             }}
           ></button>
         ) : (
