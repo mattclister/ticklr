@@ -1,10 +1,10 @@
 import { LoginPage } from "./Components/LoginPage";
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RemindersPage } from "./Components/RemindersPage";
 import { AuthenticateUser } from "./Utilities/ServerRequests";
 import 'react-toastify/dist/ReactToastify.css';
-import { Bounce, Slide, ToastContainer } from 'react-toastify';
+import { Slide, ToastContainer } from 'react-toastify';
 
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -14,24 +14,25 @@ function App() {
   // Authenticate User and Auto Login
   
   useEffect(() => {
-    const JWT_Token = localStorage.getItem("webToken");
-
-    // Authenticate User and Auto Login
-    if (JWT_Token) {
-      AuthenticateUser(JWT_Token)?.then((data) => {
-        if (data.message === "Token is valid") {
-          setLoggedIn(true);
-
-        } else {
+    const authenticate = async () => {
+      const token = localStorage.getItem("webToken");
+      if (token) {
+        try {
+          const data = await AuthenticateUser(token);
+          setLoggedIn(data.message === "Token is valid");
+        } catch (error) {
+          console.error("Authentication failed", error);
           setLoggedIn(false);
         }
-        setIsLoading(false);
-      });
-    } else {
-      setLoggedIn(false);
+      } else {
+        setLoggedIn(false);
+      }
       setIsLoading(false);
-    }
+    };
+  
+    authenticate();
   }, []);
+  
 
   // Functions
     function handleLogOut() {

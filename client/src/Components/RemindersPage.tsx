@@ -5,7 +5,6 @@ import logo from "../assets/ticklrLogo.png";
 import { ItemDetails } from "./ItemDetails";
 import { ReminderType } from "../Utilities/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { notify } from "../Utilities/notifications";
 
 interface RemindersPageProps {
   handleLogOut: () => void;
@@ -30,6 +29,7 @@ export const RemindersPage = ({ handleLogOut }: RemindersPageProps) => {
         console.log("No active reminder");
       }
     }, [active]); 
+
 
   return (
     <div id="reminders-page-container">
